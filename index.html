@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0f172a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="LeadScout">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/icon.svg">
+<link rel="stylesheet" href="style.css">
+<title>LeadScout</title>
+</head>
+<body>
+<header><h1>LeadScout</h1><span id="hdrInfo"></span></header>
+
+<main>
+  <!-- SCAN -->
+  <section id="tab-scan" class="tab">
+    <div class="card">
+      <label>Region
+        <select id="region"></select>
+      </label>
+      <label>Country
+        <select id="country"></select>
+      </label>
+      <label>City
+        <select id="city"></select>
+      </label>
+      <input id="cityCustom" type="text" placeholder="Type any city, e.g. Berlin" hidden>
+    </div>
+
+    <div class="card">
+      <div class="row between"><b>Business type</b>
+        <span><button class="link" id="catAll">All</button> · <button class="link" id="catNone">None</button></span>
+      </div>
+      <div id="cats" class="chips"></div>
+    </div>
+
+    <div class="card">
+      <b>My services (used in the message)</b>
+      <div id="svcs" class="chips"></div>
+      <label>Message language
+        <select id="lang"><option value="en">English</option><option value="ar">العربية (Arabic)</option></select>
+      </label>
+    </div>
+
+    <div class="card">
+      <label>How many leads (max 100)
+        <input id="limit" type="number" min="10" max="100" value="100">
+      </label>
+      <button id="scanBtn" class="primary">Find leads</button>
+      <p id="scanStatus" class="status"></p>
+    </div>
+  </section>
+
+  <!-- LEADS -->
+  <section id="tab-leads" class="tab" hidden>
+    <div class="card">
+      <label>Scan
+        <select id="jobSel"></select>
+      </label>
+      <div class="row wrap">
+        <label class="chk"><input type="checkbox" id="fEmail"> Has email</label>
+        <label class="chk"><input type="checkbox" id="fWa"> Has WhatsApp</label>
+        <label class="chk"><input type="checkbox" id="fHide" checked> Hide sent</label>
+      </div>
+      <div id="summary" class="status"></div>
+      <button id="bulkBtn" class="secondary" hidden>Send all emails now (Gmail script)</button>
+    </div>
+    <div id="list"></div>
+  </section>
+
+  <!-- SETTINGS -->
+  <section id="tab-settings" class="tab" hidden>
+    <div class="card">
+      <b>GitHub connection</b>
+      <p class="hint">Needed so the app can start a scan and read the results. See SETUP.md.</p>
+      <label>GitHub username <input id="sOwner" type="text" autocapitalize="off"></label>
+      <label>Repository name <input id="sRepo" type="text" autocapitalize="off" placeholder="leadscout"></label>
+      <label>Access token <input id="sToken" type="password" autocapitalize="off" placeholder="github_pat_..."></label>
+    </div>
+    <div class="card">
+      <b>About you (goes in the message)</b>
+      <label>Your name <input id="sName" type="text"></label>
+      <label>Agency / brand <input id="sAgency" type="text"></label>
+      <label>Your website or portfolio (optional) <input id="sSite" type="text"></label>
+    </div>
+    <div class="card">
+      <b>Bulk email (optional)</b>
+      <p class="hint">Google Apps Script URL from apps-script/Code.gs. Leave empty to send one by one.</p>
+      <label>Web app URL <input id="sScript" type="text" autocapitalize="off"></label>
+      <label>Secret <input id="sSecret" type="password" autocapitalize="off"></label>
+    </div>
+    <button id="saveBtn" class="primary">Save settings</button>
+    <p id="saveStatus" class="status"></p>
+  </section>
+</main>
+
+<nav>
+  <button data-tab="scan" class="active">Scan</button>
+  <button data-tab="leads">Leads</button>
+  <button data-tab="settings">Settings</button>
+</nav>
+
+<script src="app.js"></script>
+</body>
+</html>
