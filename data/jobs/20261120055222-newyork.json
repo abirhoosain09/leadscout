@@ -1,0 +1,8 @@
+{
+ "id": "20261120055222-newyork",
+ "createdAt": "2026-11-20T05:58:46.354Z",
+ "country": "United States",
+ "city": "New York",
+ "error": "Overpass failed: https://overpass.private.coffee/api/interpreter -> This operation was aborted",
+ "leads": []
+}
