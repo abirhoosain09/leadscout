@@ -79,6 +79,7 @@ const ISSUE_TEXT = {
     outdated_year: 'the design looks a bit dated',
     no_meta_desc: 'there is no search description, which hurts Google visibility',
     not_wp: 'it could be easier to manage on WordPress',
+    legacy_tech: 'the site is built with outdated technology (old code and libraries), which slows it down and makes it hard to update',
   },
   ar: {
     down: 'الموقع لا يعمل أو لا يفتح بشكل صحيح',
@@ -89,17 +90,29 @@ const ISSUE_TEXT = {
     outdated_year: 'التصميم يبدو قديماً',
     no_meta_desc: 'لا يوجد وصف لمحركات البحث مما يضعف الظهور في جوجل',
     not_wp: 'يمكن أن يكون الموقع أسهل في الإدارة على ووردبريس',
+    legacy_tech: 'الموقع مبني بتقنيات قديمة (أكواد ومكتبات قديمة) مما يبطئه ويصعّب تحديثه',
   },
 };
 
 const ISSUE_LABEL = {
   down: 'Site down', no_https: 'No HTTPS', no_viewport: 'Not mobile', slow: 'Slow', old_wp: 'Old WordPress',
-  outdated_year: 'Dated', no_meta_desc: 'No SEO desc', not_wp: 'Not WordPress',
+  outdated_year: 'Dated', no_meta_desc: 'No SEO desc', not_wp: 'Not WordPress', legacy_tech: 'Old tech',
 };
 
 const DEFAULT_DOC = 'https://docs.google.com/document/d/1cZBSV1VnnoP6MTmvV-URuDMyOpk1wYxiNycOZodYj8Y/edit';
 const DEFAULT_SIG = 'Abir Hossain\nWordPress Developer\nWhatsApp: +8801789025256';
 let selIssues = new Set();
+
+// short facts about how old the website looks
+function siteInfo(l) {
+  return [
+    l.siteYear ? '© ' + l.siteYear : '',
+    l.wpVersion ? 'WordPress ' + l.wpVersion : '',
+    l.jquery ? 'jQuery ' + l.jquery : '',
+    l.lastModified ? 'Last modified ' + String(l.lastModified).slice(5, 16) : '',
+    l.loadMs ? (l.loadMs / 1000).toFixed(1) + 's load' : '',
+  ].filter(Boolean).join(' · ');
+}
 
 function renderIssueFilters(all) {
   const counts = {};
@@ -251,7 +264,7 @@ $('scanBtn').onclick = async () => {
     const branch = await getBranch();
     const r = await gh(`${repoPath()}/actions/workflows/scan.yml/dispatches`, {
       method: 'POST',
-      body: JSON.stringify({ ref: branch, inputs: { job_id: jobId, country, city, categories: [...selCats].join(','), limit: String(limit) } }),
+      body: JSON.stringify({ ref: branch, inputs: { job_id: jobId, country, city, categories: [...selCats].join(','), limit: String(limit), running_only: String($('optRunning').checked), old_only: String($('optOld').checked) } }),
     });
     if (r.status === 401) throw new Error('This device has a wrong or expired token (401). Open a fresh setup link or paste the token again in Settings.');
     if (r.status !== 204) {
@@ -319,7 +332,7 @@ $('updateBtn').onclick = async () => {
   } catch {}
   location.reload();
 };
-const APP_VERSION = '2026-11-20.10';
+const APP_VERSION = '2026-11-20.11';
 $('hdrInfo').textContent = 'v' + APP_VERSION;
 ['fEmail', 'fWa', 'fHide'].forEach((id) => ($(id).onchange = renderLeads));
 
@@ -342,7 +355,16 @@ function buildMessage(l) {
   const sig = settings.signature || DEFAULT_SIG;
   const doc = settings.site || DEFAULT_DOC;
   const list = (l.issues || []).filter((i) => i !== 'not_wp' || (l.issues || []).length === 1);
-  const bullets = list.slice(0, 5).map((i) => '- ' + ISSUE_TEXT[lang][i]).join('\n');
+  const issueLine = (i) => {
+    if (i === 'outdated_year' && l.siteYear) {
+      return lang === 'ar' ? `الموقع يبدو قديماً (آخر حقوق نشر © ${l.siteYear})` : `the site looks outdated (the footer still says © ${l.siteYear})`;
+    }
+    if (i === 'old_wp' && l.wpVersion) {
+      return lang === 'ar' ? `إصدار ووردبريس قديم (${l.wpVersion}) وقد يشكل خطراً أمنياً` : `it runs an outdated WordPress (version ${l.wpVersion}), which can be a security risk`;
+    }
+    return ISSUE_TEXT[lang][i];
+  };
+  const bullets = list.slice(0, 5).map((i) => '- ' + issueLine(i)).join('\n');
   const svc = [...selSvcs].map((k) => SERVICES[k][li]).join(lang === 'ar' ? '، ' : ', ');
 
   if (lang === 'ar') {
@@ -395,6 +417,7 @@ function renderLeads() {
       <h3>${esc(l.name)}</h3>
       <div class="meta"><a href="${esc(l.website)}" target="_blank" rel="noopener">${esc(l.host)}</a>${l.address ? ' · ' + esc(l.address) : ''}</div>
       <div class="meta">${l.email ? '✉ ' + esc(l.email) : ''}${l.email && l.phone ? ' · ' : ''}${l.phone ? '☎ ' + esc(l.phone) : ''}</div>
+      ${siteInfo(l) ? `<div class="meta">${esc(siteInfo(l))}</div>` : ''}
       <div class="badges">${badges}</div>
       <details><summary>Message</summary><textarea>${esc(buildMessage(l))}</textarea></details>
       <div class="actions">
@@ -473,7 +496,7 @@ async function sendToSheet(job, manual) {
     date: (job.createdAt || '').slice(0, 10), city: job.city, country: job.country,
     category: CATEGORIES[l.category] || l.category || '', name: l.name, website: l.website, host: l.host,
     email: l.email || '', phone: l.phone || '', whatsapp: l.whatsapp || '',
-    issues: (l.issues || []).map((i) => ISSUE_LABEL[i] || i).join(', '), platform: l.platform || '', score: l.score || 0,
+    issues: (l.issues || []).map((i) => ISSUE_LABEL[i] || i).join(', ') + (siteInfo(l) ? ' | ' + siteInfo(l) : ''), platform: l.platform || '', score: l.score || 0,
     subject: buildSubject(l), message: buildMessage(l),
   }));
   try {
