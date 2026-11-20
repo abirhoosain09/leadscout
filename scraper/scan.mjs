@@ -11,6 +11,8 @@ const CATS = (env.CATEGORIES || '').split(',').map((s) => s.trim()).filter(Boole
 const LIMIT = Math.min(parseInt(env.LIMIT || '100', 10) || 100, 100);
 const JOB_ID = (env.JOB_ID || String(Date.now())).replace(/[^a-zA-Z0-9_-]/g, '');
 const START = Date.now();
+const RUNNING_ONLY = (env.RUNNING_ONLY || 'true') !== 'false';
+const OLD_ONLY = (env.OLD_ONLY || 'true') !== 'false';
 const MAX_RUNTIME_MS = 17 * 60 * 1000;
 
 const API_UA = 'LeadScout/1.0 (personal lead research tool)';
@@ -116,7 +118,7 @@ async function getText(url, ms = 12000) {
     });
     const ct = r.headers.get('content-type') || '';
     const text = !ct || ct.includes('html') || ct.includes('text') ? (await r.text()).slice(0, 600000) : '';
-    return { ok: r.ok, status: r.status, url: r.url, text };
+    return { ok: r.ok, status: r.status, url: r.url, text, lastModified: r.headers.get('last-modified') || '' };
   } finally {
     clearTimeout(t);
   }
@@ -319,6 +321,19 @@ async function audit(c) {
     if (!/<meta[^>]+name=["']description["'][^>]+content=["'][^"']{20,}/i.test(html)) issues.push('no_meta_desc');
     if (platform !== 'wordpress') issues.push('not_wp');
 
+    // outdated-technology signals: old presentational tags, Flash, old jQuery, old CMS versions
+    const legacyScore =
+      (html.match(/<(font|center|marquee|blink|frameset|frame)\b/gi) || []).length +
+      (html.match(/\b(bgcolor|cellpadding|cellspacing)=/gi) || []).length +
+      (/swfobject|\.swf\b|shockwave/i.test(html) ? 3 : 0) +
+      (/generator["'][^>]*(Drupal 7|Joomla! ?(1|2|3)\b)/i.test(html) ? 3 : 0);
+    const jq = html.match(/jquery[-.\/]((?:1|2)\.\d+(?:\.\d+)?)/i);
+    if (legacyScore >= 4 || jq) issues.push('legacy_tech');
+    c.jquery = jq ? jq[1] : '';
+    c.siteYear = years.length ? Math.max(...years) : 0;
+    c.wpVersion = wp ? wp[1] : '';
+    c.lastModified = page.lastModified || '';
+
     emails = findEmails(html);
     for (const m of html.matchAll(/wa\.me\/(\d{8,15})|[?&]phone=(\d{8,15})/gi)) {
       c.whatsapp = c.whatsapp || m[1] || m[2];
@@ -369,7 +384,7 @@ async function audit(c) {
   c.checked = checked;
   c.err = err || (page && !page.ok ? 'HTTP ' + page.status : '');
 
-  const weights = { down: 5, no_https: 3, no_viewport: 3, old_wp: 3, slow: 2, outdated_year: 2, no_meta_desc: 1, not_wp: 1 };
+  const weights = { legacy_tech: 3, down: 5, no_https: 3, no_viewport: 3, old_wp: 3, slow: 2, outdated_year: 2, no_meta_desc: 1, not_wp: 1 };
   c.score =
     issues.reduce((a, k) => a + (weights[k] || 0), 0) + (c.email ? 3 : 0) + (c.whatsapp ? (c.whatsappGuess ? 1 : 2) : 0);
   return c;
@@ -420,6 +435,8 @@ async function main() {
   const byHost = new Map();
   for (const el of elements) {
     const t = el.tags || {};
+    // skip businesses that OpenStreetMap marks as closed or gone
+    if (Object.keys(t).some((k) => /^(disused|abandoned|was|closed|demolished|razed|removed):/.test(k) || k === 'disused' || k === 'abandoned' || k === 'closed_date' || k === 'end_date')) continue;
     const website = normUrl(t.website || t['contact:website']);
     const host = hostOf(website);
     if (!t.name || !host || byHost.has(host) || seenSet.has(host)) continue;
@@ -436,11 +453,15 @@ async function main() {
       whatsapp: waDigits(t['contact:whatsapp'] || ''),
     });
   }
-  const candidates = shuffle([...byHost.values()]).slice(0, 320);
+  const candidates = shuffle([...byHost.values()]).slice(0, 480);
   console.log('Unseen candidates with websites:', candidates.length);
 
-  const done = (await pool(candidates, 10, audit)).filter((c) => c && c.issues);
-  const usable = done.filter((c) => c.email || c.phone || c.whatsapp);
+  const done = (await pool(candidates, 12, audit)).filter((c) => c && c.issues);
+  const OLD_SIGNS = ['no_https', 'no_viewport', 'old_wp', 'outdated_year', 'legacy_tech', 'slow'];
+  let usable = done.filter((c) => c.email || c.phone || c.whatsapp);
+  if (RUNNING_ONLY) usable = usable.filter((c) => !c.issues.includes('down')); // dead website = probably a closed business
+  if (OLD_ONLY) usable = usable.filter((c) => c.issues.some((i) => OLD_SIGNS.includes(i)));
+  console.log(`After filters: ${usable.length} of ${done.length} checked (running only: ${RUNNING_ONLY}, old only: ${OLD_ONLY})`);
   usable.sort((a, b) => b.score - a.score);
   const leads = usable.slice(0, LIMIT);
 
