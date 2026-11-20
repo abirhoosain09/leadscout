@@ -332,7 +332,7 @@ $('updateBtn').onclick = async () => {
   } catch {}
   location.reload();
 };
-const APP_VERSION = '2026-11-20.12';
+const APP_VERSION = '2026-11-20.13';
 $('hdrInfo').textContent = 'v' + APP_VERSION;
 ['fEmail', 'fWa', 'fHide'].forEach((id) => ($(id).onchange = renderLeads));
 
@@ -533,12 +533,42 @@ async function sendToSheet(job, manual) {
       method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify({ secret: settings.scriptSecret, action: 'sheet', rows }),
     });
+    if (job.id) { synced.add(job.id); store.set('ls_synced', [...synced]); }
     if (manual) alert(`Sent ${rows.length} leads to your Google Sheet. Open the sheet to check.`);
   } catch (e) {
     if (manual) alert('Failed: ' + e.message);
   }
 }
 $('sheetBtn').onclick = () => currentJob && sendToSheet(currentJob, true);
+
+// Scans finished while this device was closed are caught up automatically: any scan not yet in the Sheet is sent when the app opens.
+const SYNCED_SEED = ['20261120043717-dubai', '20261120045851-dubai', '20261120053600-newyork', '20261120054939-newyork', '20261120055222-newyork', '20261120060249-dubai', '20261120062937-manchester', '20261120065705-losangeles', '20261120073033-losangeles'];
+const synced = new Set([...SYNCED_SEED, ...store.get('ls_synced', [])]);
+let syncing = false;
+async function syncPending() {
+  if (syncing || !settings.scriptUrl || !settings.scriptSecret || needSettings()) return;
+  syncing = true;
+  try {
+    const branch = await getBranch();
+    const r = await gh(`${repoPath()}/contents/data/jobs?ref=${branch}&t=${Date.now()}`);
+    if (!r.ok) return;
+    const ids = (await r.json()).filter((f) => f.name.endsWith('.json')).map((f) => f.name.replace('.json', '')).filter((id) => !synced.has(id)).sort();
+    for (const id of ids) {
+      const jr = await gh(`${repoPath()}/contents/data/jobs/${id}.json?ref=${branch}&t=${Date.now()}`, {}, true);
+      if (!jr.ok) continue;
+      const job = await jr.json();
+      if (!job.error && (job.leads || []).length) await sendToSheet(job, false);
+      synced.add(id);
+      store.set('ls_synced', [...synced]);
+    }
+  } catch (e) {
+    // try again next time
+  } finally {
+    syncing = false;
+  }
+}
+setTimeout(syncPending, 2000);
+document.addEventListener('visibilitychange', () => { if (!document.hidden) syncPending(); });
 
 // ---------------- settings ----------------
 function loadSettingsForm() {
