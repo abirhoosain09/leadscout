@@ -57,3 +57,4 @@ nav button.active { color: var(--accent); }
 .lead.sent { opacity: .6; }
 details summary { cursor: pointer; margin-top: 10px; color: var(--accent); font-size: 14px; }
 .empty { text-align: center; color: var(--muted); padding: 30px 10px; }
+#cats { max-height: 280px; overflow-y: auto; padding-right: 4px; }
