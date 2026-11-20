@@ -115,14 +115,19 @@ function addRows_(rows) {
   ss_().getSheets().filter(isDayTab_).forEach((sh) => {
     const n = sh.getLastRow();
     if (n >= FIRST_ROW && String(sh.getRange(2, 1).getValue()) === 'Select') {
-      sh.getRange(FIRST_ROW, COL.WEBSITE, n - FIRST_ROW + 1, 1).getValues().forEach((r) => have.add(hostOf_(r[0])));
+      sh.getRange(FIRST_ROW, COL.WEBSITE, n - FIRST_ROW + 1, 2).getValues().forEach((r) => {
+        have.add('h:' + hostOf_(r[0]));
+        if (r[1]) have.add('e:' + String(r[1]).toLowerCase());
+      });
     }
   });
   const byDay = {};
   rows.forEach((r) => {
     const h = r.host || hostOf_(r.website);
-    if (!h || have.has(h)) return;
-    have.add(h);
+    const em = r.email ? 'e:' + String(r.email).toLowerCase() : '';
+    if (!h || have.has('h:' + h) || (em && have.has(em))) return; // same website or same email = same business
+    have.add('h:' + h);
+    if (em) have.add(em);
     const day = r.date || today_();
     (byDay[day] = byDay[day] || []).push(r);
   });
