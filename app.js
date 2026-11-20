@@ -48,6 +48,15 @@ const CATEGORIES = {
   construction: 'Construction', insurance: 'Insurance', it_company: 'IT company',
   car_repair: 'Car repair', car_dealer: 'Car dealer', clothes: 'Clothes shop', jewelry: 'Jewelry',
   furniture: 'Furniture', florist: 'Florist', travel_agency: 'Travel agency', photographer: 'Photographer', school: 'School / Training',
+  fast_food: 'Fast food', bar_pub: 'Bar / Pub', nightclub: 'Nightclub', ice_cream: 'Ice cream / Sweets', supermarket: 'Supermarket / Grocery',
+  butcher: 'Butcher', hospital: 'Hospital', physio: 'Physiotherapy', psychologist: 'Psychologist', hearing_aids: 'Hearing aids',
+  massage: 'Massage', tattoo: 'Tattoo studio', laundry: 'Laundry / Dry cleaning', pet_shop: 'Pet shop', books: 'Bookshop',
+  electronics: 'Electronics / Mobile', hardware: 'Hardware / DIY', garden: 'Garden centre', shoes: 'Shoe shop', tailor: 'Tailor',
+  gallery: 'Art gallery', photo_studio: 'Photo studio', printing: 'Printing', bicycle: 'Bicycle shop', motorcycle: 'Motorcycle shop',
+  car_wash: 'Car wash', tyres: 'Tyre shop', locksmith: 'Locksmith', plumber: 'Plumber', electrician: 'Electrician',
+  carpenter: 'Carpenter', hvac: 'AC / Heating (HVAC)', painter: 'Painter', roofer: 'Roofer', advertising: 'Advertising agency',
+  consulting: 'Consulting', tax_advisor: 'Tax / Finance advisor', notary: 'Notary', moving: 'Moving / Logistics', coworking: 'Coworking space',
+  events_venue: 'Events / Wedding', hostel_apartment: 'Hostel / Apartment / Motel', sports_centre: 'Sports centre', kindergarten: 'Kindergarten',
 };
 
 const SERVICES = {
