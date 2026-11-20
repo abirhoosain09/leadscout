@@ -1,0 +1,82 @@
+{
+ "id": "20261120171255-miami",
+ "createdAt": "2026-11-20T17:18:12.920Z",
+ "country": "United States",
+ "city": "Miami",
+ "categories": [
+  "tattoo",
+  "laundry"
+ ],
+ "count": 3,
+ "withEmail": 1,
+ "withWhatsapp": 3,
+ "leads": [
+  {
+   "id": "n4274006811",
+   "name": "Tattoo & Co",
+   "category": "tattoo",
+   "website": "",
+   "host": "nosite-n4274006811",
+   "noSite": true,
+   "address": "2679 Northwest 2nd Avenue Miami",
+   "email": "",
+   "phone": "+13054850770",
+   "whatsapp": "13054850770",
+   "platform": "none",
+   "issues": [
+    "no_website"
+   ],
+   "checked": true,
+   "loadMs": 0,
+   "err": "",
+   "whatsappGuess": true,
+   "score": 9
+  },
+  {
+   "id": "n6071746851",
+   "name": "My Sunny Coin Laundry",
+   "category": "laundry",
+   "website": "http://www.mydunnylaundry.com/",
+   "host": "mydunnylaundry.com",
+   "noSite": false,
+   "address": "910 Alton Road Miami Beach",
+   "email": "",
+   "phone": "+13056748421",
+   "whatsapp": "13056748421",
+   "whatsappGuess": true,
+   "platform": "other",
+   "issues": [
+    "down"
+   ],
+   "loadMs": 11,
+   "checked": true,
+   "err": "ENOTFOUND",
+   "score": 6
+  },
+  {
+   "id": "n6357125786",
+   "name": "Little Havana Laundry",
+   "category": "laundry",
+   "website": "https://www.littlehavanalaundry.com/",
+   "host": "littlehavanalaundry.com",
+   "noSite": false,
+   "address": "1360 SW 8th St",
+   "email": "littlehavanalaundry@gmail.com",
+   "phone": "+17865348444",
+   "whatsapp": "17865348444",
+   "jquery": "",
+   "siteYear": 2026,
+   "wpVersion": "",
+   "lastModified": "",
+   "whatsappGuess": true,
+   "platform": "other",
+   "issues": [
+    "not_wp"
+   ],
+   "loadMs": 525,
+   "checked": true,
+   "err": "",
+   "score": 5
+  }
+ ]
+}
