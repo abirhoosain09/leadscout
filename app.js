@@ -319,7 +319,7 @@ $('updateBtn').onclick = async () => {
   } catch {}
   location.reload();
 };
-const APP_VERSION = '2026-11-20.9';
+const APP_VERSION = '2026-11-20.10';
 $('hdrInfo').textContent = 'v' + APP_VERSION;
 ['fEmail', 'fWa', 'fHide'].forEach((id) => ($(id).onchange = renderLeads));
 
@@ -474,6 +474,7 @@ async function sendToSheet(job, manual) {
     category: CATEGORIES[l.category] || l.category || '', name: l.name, website: l.website, host: l.host,
     email: l.email || '', phone: l.phone || '', whatsapp: l.whatsapp || '',
     issues: (l.issues || []).map((i) => ISSUE_LABEL[i] || i).join(', '), platform: l.platform || '', score: l.score || 0,
+    subject: buildSubject(l), message: buildMessage(l),
   }));
   try {
     await fetch(settings.scriptUrl, {
