@@ -316,7 +316,7 @@ function buildMessage(l) {
 جهزت ملفاً مختصراً يوضح كيف يمكن تحسين موقع مثل موقعكم: ${doc}
 يسعدني إرسال تقرير مجاني عن موقعكم، بدون أي التزام.
 
-إذا لا ترغبون في استلام رسائل مني، يكفي الرد بكلمة STOP ولن أتواصل معكم مجدداً.
+بانتظار ردكم هنا.
 
 مع التحية،
 ${sig}`;
@@ -329,7 +329,7 @@ I'm a WordPress developer and I can fix this and help with: ${svc}.
 Here is a short note on how I would improve a site like yours: ${doc}
 Happy to send a free audit of your website, no obligation.
 
-If you'd rather not hear from me, just reply "STOP" and I won't contact you again.
+Let me know here, I'm waiting for your reply.
 
 Best regards,
 ${sig}`;
