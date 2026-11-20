@@ -11,8 +11,8 @@ const CATS = (env.CATEGORIES || '').split(',').map((s) => s.trim()).filter(Boole
 const LIMIT = Math.min(parseInt(env.LIMIT || '100', 10) || 100, 100);
 const JOB_ID = (env.JOB_ID || String(Date.now())).replace(/[^a-zA-Z0-9_-]/g, '');
 const START = Date.now();
-const RUNNING_ONLY = (env.RUNNING_ONLY || 'true') !== 'false';
-const OLD_ONLY = (env.OLD_ONLY || 'true') !== 'false';
+const RUNNING_ONLY = (env.RUNNING_ONLY || 'true') !== 'false'; // skip businesses marked closed in OpenStreetMap
+const NO_WEBSITE = (env.NO_WEBSITE || 'true') !== 'false'; // also return running businesses that have no website
 const MAX_RUNTIME_MS = 17 * 60 * 1000;
 
 const API_UA = 'LeadScout/1.0 (personal lead research tool)';
@@ -189,14 +189,21 @@ async function overpass(query) {
   throw new Error('Overpass failed: ' + lastErr);
 }
 
-function buildQuery(bb, catKeys) {
+function buildQuery(bb, catKeys, noSite = false) {
   const box = `${bb.s},${bb.w},${bb.n},${bb.e}`;
   const parts = [];
   for (const key of catKeys) {
     for (const f of CATEGORIES[key] || []) {
       const [k, v] = f.split('=');
-      parts.push(`nwr["${k}"="${v}"]["website"](${box});`);
-      parts.push(`nwr["${k}"="${v}"]["contact:website"](${box});`);
+      if (noSite) {
+        // running businesses that list a phone or email but have no website
+        for (const pk of ['phone', 'contact:phone', 'email', 'contact:email']) {
+          parts.push(`nwr["${k}"="${v}"]["name"]["${pk}"][!"website"][!"contact:website"](${box});`);
+        }
+      } else {
+        parts.push(`nwr["${k}"="${v}"]["website"](${box});`);
+        parts.push(`nwr["${k}"="${v}"]["contact:website"](${box});`);
+      }
     }
   }
   return `[out:json][timeout:45];(${parts.join('')});out center tags 1500;`;
@@ -281,6 +288,24 @@ function detectPlatform(html) {
 
 async function audit(c) {
   if (Date.now() - START > MAX_RUNTIME_MS) return c;
+  if (c.noSite) {
+    // running business without a website: offer to build one
+    c.platform = 'none';
+    c.issues = ['no_website'];
+    c.checked = true;
+    c.loadMs = 0;
+    c.err = '';
+    c.email = c.email || '';
+    if (c.whatsapp) {
+      c.whatsappGuess = false;
+    } else {
+      const d = waDigits(c.phone);
+      c.whatsapp = d;
+      c.whatsappGuess = !!d;
+    }
+    c.score = 8 + (c.email ? 3 : 0) + (c.whatsapp ? 1 : 0);
+    return c;
+  }
   const host = hostOf(c.website);
   const t0 = Date.now();
   let page = null;
@@ -384,7 +409,7 @@ async function audit(c) {
   c.checked = checked;
   c.err = err || (page && !page.ok ? 'HTTP ' + page.status : '');
 
-  const weights = { legacy_tech: 3, down: 5, no_https: 3, no_viewport: 3, old_wp: 3, slow: 2, outdated_year: 2, no_meta_desc: 1, not_wp: 1 };
+  const weights = { no_website: 8, legacy_tech: 3, down: 5, no_https: 3, no_viewport: 3, old_wp: 3, slow: 2, outdated_year: 2, no_meta_desc: 1, not_wp: 1 };
   c.score =
     issues.reduce((a, k) => a + (weights[k] || 0), 0) + (c.email ? 3 : 0) + (c.whatsapp ? (c.whatsappGuess ? 1 : 2) : 0);
   return c;
@@ -421,6 +446,17 @@ async function main() {
       lastErr = e.message;
       console.log('category failed:', key, e.message);
     }
+    if (NO_WEBSITE) {
+      await sleep(1000);
+      try {
+        const d2 = await overpass(buildQuery(bb, [key], true));
+        d2.elements.forEach((el) => { el.__noSite = true; });
+        elements.push(...d2.elements);
+        okCount++;
+      } catch (e) {
+        console.log('no-website query failed:', key, e.message);
+      }
+    }
     await sleep(1500);
   }
   if (!okCount) throw new Error(lastErr || 'Overpass failed');
@@ -436,9 +472,15 @@ async function main() {
   for (const el of elements) {
     const t = el.tags || {};
     // skip businesses that OpenStreetMap marks as closed or gone
-    if (Object.keys(t).some((k) => /^(disused|abandoned|was|closed|demolished|razed|removed):/.test(k) || k === 'disused' || k === 'abandoned' || k === 'closed_date' || k === 'end_date')) continue;
+    if (RUNNING_ONLY && Object.keys(t).some((k) => /^(disused|abandoned|was|closed|demolished|razed|removed):/.test(k) || k === 'disused' || k === 'abandoned' || k === 'closed_date' || k === 'end_date')) continue;
     const website = normUrl(t.website || t['contact:website']);
-    const host = hostOf(website);
+    let host = hostOf(website);
+    const noSite = !host;
+    if (noSite) {
+      if (!NO_WEBSITE || !t.name) continue;
+      if (!(t.phone || t['contact:phone'] || t['contact:mobile'] || t.email || t['contact:email'])) continue; // need a way to contact them
+      host = 'nosite-' + el.type[0] + el.id;
+    }
     if (!t.name || !host || byHost.has(host) || seenSet.has(host)) continue;
     const addr = [t['addr:housenumber'], t['addr:street'], t['addr:city'] || t['addr:suburb']].filter(Boolean).join(' ');
     byHost.set(host, {
@@ -447,6 +489,7 @@ async function main() {
       category: catOf(t),
       website,
       host,
+      noSite,
       address: addr,
       email: (t.email || t['contact:email'] || '').split(';')[0].trim().toLowerCase(),
       phone: cleanPhone(t.phone || t['contact:phone'] || t['contact:mobile']),
@@ -459,9 +502,7 @@ async function main() {
   const done = (await pool(candidates, 12, audit)).filter((c) => c && c.issues);
   const OLD_SIGNS = ['no_https', 'no_viewport', 'old_wp', 'outdated_year', 'legacy_tech', 'slow'];
   let usable = done.filter((c) => c.email || c.phone || c.whatsapp);
-  if (RUNNING_ONLY) usable = usable.filter((c) => !c.issues.includes('down')); // dead website = probably a closed business
-  if (OLD_ONLY) usable = usable.filter((c) => c.issues.some((i) => OLD_SIGNS.includes(i)));
-  console.log(`After filters: ${usable.length} of ${done.length} checked (running only: ${RUNNING_ONLY}, old only: ${OLD_ONLY})`);
+  console.log(`Usable leads: ${usable.length} of ${done.length} checked (skip closed: ${RUNNING_ONLY}, include no-website: ${NO_WEBSITE})`);
   usable.sort((a, b) => b.score - a.score);
   const leads = usable.slice(0, LIMIT);
 
