@@ -124,9 +124,10 @@ const store = {
 };
 let settings = store.get('ls_settings', {});
 const DEFAULTS = { owner: 'abirhoosain09', repo: 'leadscout', name: 'Abir Hossain' };
-Object.keys(DEFAULTS).forEach((k) => {
-  if (!settings[k] || (k !== 'name' && /\s/.test(settings[k]))) settings[k] = DEFAULTS[k];
-});
+// this app always talks to this one repo, so a wrongly typed username/repo on a device can never break it
+settings.owner = DEFAULTS.owner;
+settings.repo = DEFAULTS.repo;
+if (!settings.name) settings.name = DEFAULTS.name;
 // a "setup link" (…#cfg=...) carries this device's settings to a new device
 try {
   const m = location.hash.match(/cfg=([^&]+)/);
@@ -318,7 +319,7 @@ $('updateBtn').onclick = async () => {
   } catch {}
   location.reload();
 };
-const APP_VERSION = '2026-11-20.8';
+const APP_VERSION = '2026-11-20.9';
 $('hdrInfo').textContent = 'v' + APP_VERSION;
 ['fEmail', 'fWa', 'fHide'].forEach((id) => ($(id).onchange = renderLeads));
 
@@ -500,7 +501,7 @@ function loadSettingsForm() {
 }
 $('saveBtn').onclick = () => {
   settings = {
-    owner: $('sOwner').value.trim(), repo: $('sRepo').value.trim(), token: $('sToken').value.trim(),
+    owner: DEFAULTS.owner, repo: DEFAULTS.repo, token: $('sToken').value.trim(),
     name: $('sName').value.trim(), agency: $('sAgency').value.trim(), site: $('sSite').value.trim(), signature: $('sSig').value.trim(),
     scriptUrl: $('sScript').value.trim(), scriptSecret: $('sSecret').value.trim(),
   };
