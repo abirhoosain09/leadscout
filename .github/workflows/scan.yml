@@ -15,6 +15,12 @@ on:
         required: true
       limit:
         default: "100"
+      running_only:
+        description: Skip dead websites and closed businesses
+        default: "true"
+      old_only:
+        description: Only websites with old or problem signs
+        default: "true"
 
 permissions:
   contents: write
@@ -40,6 +46,8 @@ jobs:
           CITY: ${{ inputs.city }}
           CATEGORIES: ${{ inputs.categories }}
           LIMIT: ${{ inputs.limit }}
+          RUNNING_ONLY: ${{ inputs.running_only }}
+          OLD_ONLY: ${{ inputs.old_only }}
       - name: Save results
         run: |
           git config user.name "leadscout-bot"
