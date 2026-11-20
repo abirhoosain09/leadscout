@@ -318,7 +318,7 @@ $('updateBtn').onclick = async () => {
   } catch {}
   location.reload();
 };
-const APP_VERSION = '2026-11-20.7';
+const APP_VERSION = '2026-11-20.8';
 $('hdrInfo').textContent = 'v' + APP_VERSION;
 ['fEmail', 'fWa', 'fHide'].forEach((id) => ($(id).onchange = renderLeads));
 
@@ -519,6 +519,22 @@ $('linkBtn').onclick = async () => {
     $('saveStatus').textContent = 'Setup link copied. It contains your token: send it only to yourself and open it once on the new device.';
   } catch {
     prompt('Copy this link (send only to yourself):', link);
+  }
+};
+$('qrBtn').onclick = () => {
+  const keys = ['token', 'name', 'signature', 'site', 'scriptUrl', 'scriptSecret'];
+  const cfg = {};
+  keys.forEach((k) => { if (settings[k]) cfg[k] = settings[k]; });
+  if (!cfg.token) { $('saveStatus').textContent = 'Save your token in Settings first, then show the QR.'; return; }
+  const b64 = btoa(unescape(encodeURIComponent(JSON.stringify(cfg)))).replace(/\+/g, '-').replace(/\//g, '_');
+  const link = location.origin + location.pathname + '#cfg=' + b64;
+  try {
+    const q = qrcode(0, 'L');
+    q.addData(link);
+    q.make();
+    $('qrBox').innerHTML = '<img alt="Setup QR" style="width:100%;max-width:320px;background:#fff;padding:8px;border-radius:12px" src="' + q.createDataURL(6, 4) + '"><p class="hint">Scan with the phone camera and open the link. Do not share or screenshot this QR: it contains your token.</p>';
+  } catch (e) {
+    $('qrBox').textContent = 'Could not make the QR: ' + e.message;
   }
 };
 loadSettingsForm();
