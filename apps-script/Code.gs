@@ -5,9 +5,12 @@
 //
 // What it does
 // - Every day gets its own tab (named 2026-11-20) with that day's leads, newest day on the left.
-// - Each row has a WhatsApp link (opens the chat with the message ready) and a "Send email" link
-//   (shows a preview, then sends from your Gmail when you confirm).
-// - Cell A1 of each day tab: "Send ALL New emails" (asks to confirm, then sends every row with Status "New").
+// - Each row has a tick box, a WhatsApp link and a "Send email" link (preview, then confirm).
+// - Links in row 1 of each tab:
+//     All / None            tick or untick every row
+//     Send SELECTED emails  emails every ticked row (asks to confirm first)
+//     WhatsApp queue        shows the ticked leads one by one: tap to open WhatsApp, then "next"
+//     Send ALL New emails   emails every row whose Status is "New" (asks to confirm first)
 // - Status dropdown: New, Emailed, WhatsApp sent, Replied, Won, Not interested.
 // Free Gmail allows about 100 emails per day through scripts.
 
@@ -17,9 +20,9 @@ const WEBAPP_URL = ''; // leave empty to detect automatically
 const SENDER_NAME = 'Your Name';
 const DAILY_EMAIL_CAP = 100;
 
-const HEADERS = ['Date', 'City', 'Country', 'Type', 'Name', 'Website', 'Email', 'Phone', 'WhatsApp', 'Send email', 'Problems', 'Platform', 'Score', 'Status', 'Notes', 'Subject', 'Message'];
+const HEADERS = ['Select', 'Date', 'City', 'Country', 'Type', 'Name', 'Website', 'Email', 'Phone', 'WhatsApp', 'Send email', 'Problems', 'Platform', 'Score', 'Status', 'Notes', 'Subject', 'Message'];
 const STATUSES = ['New', 'Emailed', 'WhatsApp sent', 'Replied', 'Won', 'Not interested'];
-const COL = { NAME: 5, WEBSITE: 6, EMAIL: 7, STATUS: 14, NOTES: 15, SUBJECT: 16, MESSAGE: 17 };
+const COL = { SELECT: 1, NAME: 6, WEBSITE: 7, EMAIL: 8, WA: 10, STATUS: 15, NOTES: 16, SUBJECT: 17, MESSAGE: 18 };
 const FIRST_ROW = 3;
 const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[a-z]{2,}$/i;
 
@@ -64,7 +67,10 @@ function doGet(e) {
   if (p.secret !== SECRET) return page_('<p>Not allowed.</p>');
   try {
     if (p.action === 'email') return emailPage_(p);
-    if (p.action === 'bulk') return bulkPage_(p);
+    if (p.action === 'bulk') return bulkPage_(p, false);
+    if (p.action === 'bulkSel') return bulkPage_(p, true);
+    if (p.action === 'select') return selectPage_(p);
+    if (p.action === 'waq') return waqPage_(p);
   } catch (err) {
     return page_('<p>Error: ' + esc_(String(err)) + '</p>');
   }
@@ -75,18 +81,31 @@ function doGet(e) {
 function dayTab_(day) {
   const ss = ss_();
   let sh = ss.getSheetByName(day);
+  if (sh && String(sh.getRange(2, 1).getValue()) !== 'Select') {
+    // older layout: keep it as an archive and start a fresh tab
+    try { sh.setName(day + ' (old)'); } catch (err) { sh.setName(day + ' (old ' + stamp_() + ')'); }
+    sh = null;
+  }
   if (sh) return sh;
-  const old = ss.getSheetByName('Leads'); // keep the old single tab as an archive
-  if (old) {
-    try { old.setName('Old leads'); } catch (err) {}
+  const oldAll = ss.getSheetByName('Leads');
+  if (oldAll) {
+    try { oldAll.setName('Old leads'); } catch (err) {}
   }
   sh = ss.insertSheet(day, 0);
-  const bulk = baseUrl_() + '?action=bulk&tab=' + day + '&secret=' + SECRET;
-  sh.getRange(1, 1).setFormula('=HYPERLINK("' + bulk + '","▶ Send ALL \'New\' emails in this tab")').setFontWeight('bold').setFontColor('#1d4ed8');
-  sh.getRange(1, 4).setValue('WhatsApp: tap the link, then press Send. Email: tap "Send email", check the preview, confirm.');
+  const b = baseUrl_() + '?secret=' + SECRET + '&tab=' + day + '&action=';
+  [
+    [1, '☑ All', 'select&mode=all'],
+    [2, '☐ None', 'select&mode=none'],
+    [3, '✉ Send SELECTED emails', 'bulkSel'],
+    [6, '💬 WhatsApp queue (SELECTED)', 'waq'],
+    [8, '✉ Send ALL New emails', 'bulk'],
+  ].forEach((c) => {
+    sh.getRange(1, c[0]).setFormula('=HYPERLINK("' + b + c[2] + '","' + c[1] + '")').setFontWeight('bold').setFontColor('#1d4ed8');
+  });
+  sh.getRange(1, 12).setValue('Tick rows, then use the links. WhatsApp / Send email links work per row.');
   sh.getRange(2, 1, 1, HEADERS.length).setValues([HEADERS]).setFontWeight('bold').setBackground('#0f172a').setFontColor('#ffffff');
   sh.setFrozenRows(2);
-  [[5, 200], [6, 220], [7, 220], [11, 240]].forEach((w) => sh.setColumnWidth(w[0], w[1]));
+  [[1, 80], [2, 90], [6, 200], [7, 220], [8, 220], [12, 240]].forEach((w) => sh.setColumnWidth(w[0], w[1]));
   sh.hideColumns(COL.SUBJECT, 2);
   return sh;
 }
@@ -95,7 +114,9 @@ function addRows_(rows) {
   const have = new Set();
   ss_().getSheets().filter(isDayTab_).forEach((sh) => {
     const n = sh.getLastRow();
-    if (n >= FIRST_ROW) sh.getRange(FIRST_ROW, COL.WEBSITE, n - FIRST_ROW + 1, 1).getValues().forEach((r) => have.add(hostOf_(r[0])));
+    if (n >= FIRST_ROW && String(sh.getRange(2, 1).getValue()) === 'Select') {
+      sh.getRange(FIRST_ROW, COL.WEBSITE, n - FIRST_ROW + 1, 1).getValues().forEach((r) => have.add(hostOf_(r[0])));
+    }
   });
   const byDay = {};
   rows.forEach((r) => {
@@ -115,19 +136,33 @@ function addRows_(rows) {
       const row = start + i;
       const wa = r.whatsapp ? String(r.whatsapp).replace(/\D/g, '') : '';
       return [
-        day, r.city, r.country, r.category, r.name, r.website, r.email, r.phone,
-        wa ? '=HYPERLINK("https://wa.me/' + wa + '?text="&ENCODEURL(Q' + row + '),"WhatsApp")' : '',
+        false, day, r.city, r.country, r.category, r.name, r.website, r.email, r.phone,
+        wa ? '=HYPERLINK("https://wa.me/' + wa + '?text="&ENCODEURL(R' + row + '),"WhatsApp")' : '',
         r.email ? '=HYPERLINK("' + base + '?action=email&tab=' + day + '&secret=' + SECRET + '&row="&ROW(),"Send email")' : '',
         r.issues, r.platform, r.score, 'New', '', r.subject || '', r.message || '',
       ];
     });
     sh.getRange(start, 1, values.length, HEADERS.length).setValues(values);
+    sh.getRange(start, COL.SELECT, values.length, 1).insertCheckboxes();
     sh.getRange(start, COL.STATUS, values.length, 1).setDataValidation(
       SpreadsheetApp.newDataValidation().requireValueInList(STATUSES, true).build()
     );
     added += values.length;
   });
   return { ok: true, added: added };
+}
+
+function readRows_(sh) {
+  const n = sh.getLastRow();
+  if (n < FIRST_ROW) return [];
+  const count = n - FIRST_ROW + 1;
+  const vals = sh.getRange(FIRST_ROW, 1, count, HEADERS.length).getValues();
+  const forms = sh.getRange(FIRST_ROW, COL.WA, count, 1).getFormulas();
+  return vals.map((v, i) => ({
+    row: FIRST_ROW + i,
+    v: v,
+    wa: (String(forms[i][0]).match(/wa\.me\/(\d+)/) || [])[1] || '',
+  }));
 }
 
 // ---------- sending ----------
@@ -163,8 +198,18 @@ function page_(html) {
 function link_(p) {
   return baseUrl_() + '?' + Object.keys(p).map((k) => k + '=' + encodeURIComponent(p[k])).join('&');
 }
-function button_(href, label) {
-  return '<p><a href="' + href + '" target="_top" style="display:inline-block;background:#2563eb;color:#fff;padding:12px 18px;border-radius:10px;text-decoration:none;font-weight:600">' + label + '</a></p>';
+function button_(href, label, color, blank) {
+  return '<p><a href="' + href + '" target="' + (blank ? '_blank' : '_top') + '" style="display:inline-block;background:' + (color || '#2563eb') +
+    ';color:#fff;padding:12px 18px;border-radius:10px;text-decoration:none;font-weight:600">' + label + '</a></p>';
+}
+
+function selectPage_(p) {
+  const sh = ss_().getSheetByName(p.tab);
+  if (!sh) return page_('<p>Tab not found.</p>');
+  const rows = readRows_(sh);
+  const on = p.mode === 'all';
+  if (rows.length) sh.getRange(FIRST_ROW, COL.SELECT, rows.length, 1).setValue(on);
+  return page_('<h3>' + (on ? '☑ All ' + rows.length + ' rows selected' : '☐ Selection cleared') + '</h3><p>Go back to the sheet tab. The tick boxes are updated.</p>');
 }
 
 function emailPage_(p) {
@@ -184,6 +229,7 @@ function emailPage_(p) {
     GmailApp.sendEmail(to, subject, body, { name: SENDER_NAME });
     sh.getRange(row, COL.STATUS).setValue('Emailed');
     sh.getRange(row, COL.NOTES).setValue('Emailed ' + stamp_());
+    sh.getRange(row, COL.SELECT).setValue(false);
     return page_('<h3>✅ Sent</h3><p>Email sent to <b>' + esc_(to) + '</b>. The row is now marked "Emailed".</p>');
   }
   return page_(
@@ -194,31 +240,61 @@ function emailPage_(p) {
   );
 }
 
-function bulkPage_(p) {
+function bulkPage_(p, selectedOnly) {
   const sh = ss_().getSheetByName(p.tab);
   if (!sh) return page_('<p>Tab not found.</p>');
-  const n = sh.getLastRow();
-  if (n < FIRST_ROW) return page_('<p>No leads in this tab.</p>');
-  const data = sh.getRange(FIRST_ROW, 1, n - FIRST_ROW + 1, HEADERS.length).getValues();
-  const todo = [];
-  data.forEach((v, i) => {
-    if (v[COL.STATUS - 1] === 'New' && EMAIL_RE.test(String(v[COL.EMAIL - 1]).trim()) && v[COL.MESSAGE - 1]) todo.push(i);
+  const todo = readRows_(sh).filter((r) => {
+    const okMail = EMAIL_RE.test(String(r.v[COL.EMAIL - 1]).trim()) && r.v[COL.MESSAGE - 1];
+    if (!okMail) return false;
+    return selectedOnly ? r.v[COL.SELECT - 1] === true && r.v[COL.STATUS - 1] !== 'Emailed' : r.v[COL.STATUS - 1] === 'New';
   });
+  const what = selectedOnly ? 'ticked rows (not yet emailed)' : 'rows with Status "New"';
   if (p.confirm === '1') {
     let sent = 0;
-    for (const i of todo) {
+    for (const r of todo) {
       if (!takeQuota_(1)) break;
-      const v = data[i];
-      GmailApp.sendEmail(String(v[COL.EMAIL - 1]).trim(), v[COL.SUBJECT - 1], v[COL.MESSAGE - 1], { name: SENDER_NAME });
-      sh.getRange(FIRST_ROW + i, COL.STATUS).setValue('Emailed');
-      sh.getRange(FIRST_ROW + i, COL.NOTES).setValue('Emailed ' + stamp_());
+      GmailApp.sendEmail(String(r.v[COL.EMAIL - 1]).trim(), r.v[COL.SUBJECT - 1], r.v[COL.MESSAGE - 1], { name: SENDER_NAME });
+      sh.getRange(r.row, COL.STATUS).setValue('Emailed');
+      sh.getRange(r.row, COL.NOTES).setValue('Emailed ' + stamp_());
+      sh.getRange(r.row, COL.SELECT).setValue(false);
       sent++;
       Utilities.sleep(1500);
     }
-    return page_('<h3>✅ Done</h3><p>Sent ' + sent + ' of ' + todo.length + ' emails.' + (sent < todo.length ? ' The daily limit was reached; the rest stay "New".' : '') + '</p>');
+    return page_('<h3>✅ Done</h3><p>Sent ' + sent + ' of ' + todo.length + ' emails.' + (sent < todo.length ? ' The daily limit was reached; the rest were not sent.' : '') + '</p>');
   }
   return page_(
-    '<h3>Send ' + todo.length + ' emails?</h3><p>Every row in tab <b>' + esc_(p.tab) + '</b> with Status "New" and an email address will be emailed from your Gmail now. This cannot be undone.</p>' +
-    (todo.length ? button_(link_({ action: 'bulk', tab: p.tab, secret: p.secret, confirm: 1 }), 'Yes, send ' + todo.length + ' emails') : '')
+    '<h3>Send ' + todo.length + ' emails?</h3><p>Tab <b>' + esc_(p.tab) + '</b>: ' + todo.length + ' ' + what + ' with an email address will be emailed from your Gmail now. This cannot be undone.</p>' +
+    (todo.length ? button_(link_({ action: p.action, tab: p.tab, secret: p.secret, confirm: 1 }), 'Yes, send ' + todo.length + ' emails') : '')
+  );
+}
+
+function waqPage_(p) {
+  const sh = ss_().getSheetByName(p.tab);
+  if (!sh) return page_('<p>Tab not found.</p>');
+  if (p.done) {
+    const r = Number(p.done);
+    if (r >= FIRST_ROW) {
+      sh.getRange(r, COL.STATUS).setValue('WhatsApp sent');
+      sh.getRange(r, COL.NOTES).setValue('WhatsApp ' + stamp_());
+      sh.getRange(r, COL.SELECT).setValue(false);
+    }
+  }
+  if (p.skip) {
+    const r = Number(p.skip);
+    if (r >= FIRST_ROW) sh.getRange(r, COL.SELECT).setValue(false);
+  }
+  const q = readRows_(sh).filter((r) => r.v[COL.SELECT - 1] === true && r.wa && r.v[COL.STATUS - 1] !== 'WhatsApp sent');
+  if (!q.length) {
+    return page_('<h3>✅ WhatsApp queue finished</h3><p>No more ticked leads with a WhatsApp number. Tick more rows in the sheet and open the queue again.</p>');
+  }
+  const cur = q[0];
+  const msg = String(cur.v[COL.MESSAGE - 1] || '');
+  const open = 'https://wa.me/' + cur.wa + '?text=' + encodeURIComponent(msg);
+  return page_(
+    '<p style="color:#64748b">' + q.length + ' left in the queue</p><h3>' + esc_(cur.v[COL.NAME - 1]) + '</h3><p>+' + esc_(cur.wa) + '</p>' +
+    '<pre style="white-space:pre-wrap;background:#f1f5f9;padding:12px;border-radius:8px;font-family:inherit">' + esc_(msg) + '</pre>' +
+    button_(open, '1. Open WhatsApp', '#16a34a', true) +
+    button_(link_({ action: 'waq', tab: p.tab, secret: p.secret, done: cur.row }), '2. I sent it, next ▶') +
+    '<p><a href="' + link_({ action: 'waq', tab: p.tab, secret: p.secret, skip: cur.row }) + '" target="_top">Skip this lead</a></p>'
   );
 }
