@@ -343,7 +343,7 @@ function renderLeads() {
   $('list').innerHTML = leads.map((l, idx) => {
     const k = leadKey(l), s = sent[k] || {};
     const badges = (l.issues || []).map((i) => `<span class="badge bad">${esc(ISSUE_LABEL[i] || i)}</span>`).join('') +
-      `<span class="badge">${esc(l.platform || '')}</span>` + (l.category ? `<span class="badge">${esc(CATEGORIES[l.category] || l.category)}</span>` : '');
+      (l.checked === false ? '<span class="badge">Site not checked</span>' : `<span class="badge">${esc(l.platform || '')}</span>`) + (l.category ? `<span class="badge">${esc(CATEGORIES[l.category] || l.category)}</span>` : '');
     return `<div class="card lead${s.email || s.wa ? ' sent' : ''}" data-i="${idx}" data-k="${esc(k)}">
       <h3>${esc(l.name)}</h3>
       <div class="meta"><a href="${esc(l.website)}" target="_blank" rel="noopener">${esc(l.host)}</a>${l.address ? ' · ' + esc(l.address) : ''}</div>
