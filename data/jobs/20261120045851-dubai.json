@@ -1,0 +1,424 @@
+{
+ "id": "20261120045851-dubai",
+ "createdAt": "2026-11-20T05:00:33.090Z",
+ "country": "United Arab Emirates",
+ "city": "Dubai",
+ "categories": [
+  "restaurant"
+ ],
+ "count": 20,
+ "withEmail": 20,
+ "withWhatsapp": 20,
+ "leads": [
+  {
+   "id": "n8327606973",
+   "name": "Antar",
+   "category": "restaurant",
+   "website": "https://www.antarcafe.com/",
+   "host": "antarcafe.com",
+   "address": "",
+   "email": "info@antarcafe.com",
+   "phone": "+97142805639",
+   "whatsapp": "97142805639",
+   "whatsappGuess": true,
+   "platform": "other",
+   "issues": [
+    "no_viewport",
+    "slow",
+    "no_meta_desc",
+    "not_wp"
+   ],
+   "loadMs": 4256,
+   "checked": true,
+   "err": "",
+   "score": 11
+  },
+  {
+   "id": "n7309477767",
+   "name": "Socialicious Cafe",
+   "category": "restaurant",
+   "website": "https://www.socialicious.cafe/",
+   "host": "socialicious.cafe",
+   "address": "",
+   "email": "manager@socialicious.cafe",
+   "phone": "+97142400204",
+   "whatsapp": "97142400204",
+   "whatsappGuess": true,
+   "platform": "other",
+   "issues": [
+    "slow",
+    "outdated_year",
+    "no_meta_desc",
+    "not_wp"
+   ],
+   "loadMs": 4314,
+   "checked": true,
+   "err": "",
+   "score": 10
+  },
+  {
+   "id": "n5225876621",
+   "name": "Yeshi kava restaurant llcam",
+   "category": "restaurant",
+   "website": "http://www.yeshikava.com/",
+   "host": "yeshikava.com",
+   "address": "",
+   "email": "info@yeshikava.com",
+   "phone": "+97143967223",
+   "whatsapp": "97143967223",
+   "whatsappGuess": true,
+   "platform": "other",
+   "issues": [
+    "down"
+   ],
+   "loadMs": 35,
+   "checked": true,
+   "err": "ENOTFOUND",
+   "score": 9
+  },
+  {
+   "id": "n1406990870",
+   "name": "Khaymat Al Bahar",
+   "category": "restaurant",
+   "website": "https://www.jumeirah.com/en/Hotels-and-Resorts/Destinations/Dubai/Madinat-Jumeirah/Restaurants--Nightlife/Casual-Dining/Khaymat-Al-Bahar/",
+   "host": "jumeirah.com",
+   "address": "Al Qasr دبي",
+   "email": "mjrestaurants@jumeirah.com",
+   "phone": "+97143666730",
+   "whatsapp": "97143666730",
+   "whatsappGuess": true,
+   "platform": "other",
+   "issues": [
+    "down"
+   ],
+   "loadMs": 1905,
+   "checked": true,
+   "err": "HTTP 404",
+   "score": 9
+  },
+  {
+   "id": "n1412984505",
+   "name": "The Rivington Grill",
+   "category": "restaurant",
+   "website": "http://www.rivingtongrill.ae/",
+   "host": "rivingtongrill.ae",
+   "address": "دبي",
+   "email": "reservations@rivingtongrill.ae",
+   "phone": "+97144230903",
+   "whatsapp": "97144230903",
+   "whatsappGuess": true,
+   "platform": "other",
+   "issues": [
+    "down"
+   ],
+   "loadMs": 43,
+   "checked": true,
+   "err": "ENOTFOUND",
+   "score": 9
+  },
+  {
+   "id": "n5464345224",
+   "name": "Haji Sahab Restaurant",
+   "category": "restaurant",
+   "website": "https://hajisahab.com/",
+   "host": "hajisahab.com",
+   "address": "",
+   "email": "anis@hajisahab.com",
+   "phone": "+97144279602",
+   "whatsapp": "97144279602",
+   "whatsappGuess": true,
+   "platform": "other",
+   "issues": [
+    "down"
+   ],
+   "loadMs": 941,
+   "checked": true,
+   "err": "HTTP 526",
+   "score": 9
+  },
+  {
+   "id": "n4911769927",
+   "name": "Perfetto Pizzeria Restaurant",
+   "category": "restaurant",
+   "website": "https://perfettopizzeria.ae/",
+   "host": "perfettopizzeria.ae",
+   "address": "1 شارع 22 دبي",
+   "email": "tjdubaijlt@gmail.com",
+   "phone": "+97148786101",
+   "whatsapp": "97148786101",
+   "whatsappGuess": true,
+   "platform": "other",
+   "issues": [
+    "down"
+   ],
+   "loadMs": 75,
+   "checked": true,
+   "err": "ENOTFOUND",
+   "score": 9
+  },
+  {
+   "id": "n8024801633",
+   "name": "Chick N Co.",
+   "category": "restaurant",
+   "website": "https://chicknco.ae/",
+   "host": "chicknco.ae",
+   "address": "",
+   "email": "chick@pokeandco.com",
+   "phone": "+97145706636",
+   "whatsapp": "97145706636",
+   "whatsappGuess": true,
+   "platform": "other",
+   "issues": [
+    "down"
+   ],
+   "loadMs": 90,
+   "checked": true,
+   "err": "ENOTFOUND",
+   "score": 9
+  },
+  {
+   "id": "n4941169171",
+   "name": "New Marina Restaurant",
+   "category": "restaurant",
+   "website": "https://www.newmarinarestaurant.com/",
+   "host": "newmarinarestaurant.com",
+   "address": "Al Rigga Street",
+   "email": "newmarinarestaurant1@gmail.com",
+   "phone": "+97142950111",
+   "whatsapp": "97142950111",
+   "whatsappGuess": true,
+   "platform": "other",
+   "issues": [
+    "down"
+   ],
+   "loadMs": 54,
+   "checked": true,
+   "err": "ENOTFOUND",
+   "score": 9
+  },
+  {
+   "id": "n9016682608",
+   "name": "KIZA Restaurant & Lounge",
+   "category": "restaurant",
+   "website": "https://kiza.ae/",
+   "host": "kiza.ae",
+   "address": "Emirates Financial Towers, Ground Floor, DIFC, Dubai دبي",
+   "email": "info@kiza.ae",
+   "phone": "+97144539038",
+   "whatsapp": "97144539038",
+   "whatsappGuess": true,
+   "platform": "wordpress",
+   "issues": [
+    "slow",
+    "outdated_year",
+    "no_meta_desc"
+   ],
+   "loadMs": 4082,
+   "checked": true,
+   "err": "",
+   "score": 9
+  },
+  {
+   "id": "n7132906915",
+   "name": "Curry Chatti",
+   "category": "restaurant",
+   "website": "https://currychatti.com/",
+   "host": "currychatti.com",
+   "address": "54 4c شارع",
+   "email": "currychattirestaurant@gmail.com",
+   "phone": "+97143379115",
+   "whatsapp": "97143379115",
+   "whatsappGuess": true,
+   "platform": "other",
+   "issues": [
+    "down"
+   ],
+   "loadMs": 458,
+   "checked": true,
+   "err": "ENOTFOUND",
+   "score": 9
+  },
+  {
+   "id": "n4913268641",
+   "name": "مطعم ميران اربيل العراقي",
+   "category": "restaurant",
+   "website": "https://miranerbilrestaurant.com/",
+   "host": "miranerbilrestaurant.com",
+   "address": "Al Rigga Street",
+   "email": "admin@miranerbilrestaurant.com",
+   "phone": "+971042208020",
+   "whatsapp": "971042208020",
+   "whatsappGuess": true,
+   "platform": "other",
+   "issues": [
+    "down"
+   ],
+   "loadMs": 356,
+   "checked": true,
+   "err": "ENOTFOUND",
+   "score": 9
+  },
+  {
+   "id": "n7362969839",
+   "name": "Tandoori Junction",
+   "category": "restaurant",
+   "website": "https://tandoorijunction.ae/",
+   "host": "tandoorijunction.ae",
+   "address": "F Cluster F Jumeirah Lakes Towers",
+   "email": "tjdubaijlt@gmail.com",
+   "phone": "+97144311866",
+   "whatsapp": "97144311866",
+   "whatsappGuess": true,
+   "platform": "other",
+   "issues": [
+    "down"
+   ],
+   "loadMs": 520,
+   "checked": true,
+   "err": "ENOTFOUND",
+   "score": 9
+  },
+  {
+   "id": "n8024801639",
+   "name": "Leila",
+   "category": "restaurant",
+   "website": "https://leilarestaurant.ae/",
+   "host": "leilarestaurant.ae",
+   "address": "",
+   "email": "info@pinnacle-rm.com",
+   "phone": "+97144483384",
+   "whatsapp": "97144483384",
+   "whatsappGuess": true,
+   "platform": "other",
+   "issues": [
+    "no_viewport",
+    "no_meta_desc",
+    "not_wp"
+   ],
+   "loadMs": 225,
+   "checked": true,
+   "err": "",
+   "score": 9
+  },
+  {
+   "id": "n8872352509",
+   "name": "Volt",
+   "category": "restaurant",
+   "website": "https://www.voltdining.com/",
+   "host": "voltdining.com",
+   "address": "",
+   "email": "career.voltdining@gmail.com",
+   "phone": "+971502777506",
+   "whatsapp": "971502777506",
+   "whatsappGuess": true,
+   "platform": "other",
+   "issues": [
+    "down"
+   ],
+   "loadMs": 49,
+   "checked": true,
+   "err": "ENOTFOUND",
+   "score": 9
+  },
+  {
+   "id": "n8944243422",
+   "name": "Beit El Kell",
+   "category": "restaurant",
+   "website": "https://www.beitelkell.ae/",
+   "host": "beitelkell.ae",
+   "address": "",
+   "email": "info@beitelkell.ae",
+   "phone": "+97145805097",
+   "whatsapp": "97145805097",
+   "whatsappGuess": true,
+   "platform": "other",
+   "issues": [
+    "down"
+   ],
+   "loadMs": 78,
+   "checked": true,
+   "err": "ENOTFOUND",
+   "score": 9
+  },
+  {
+   "id": "n8065272561",
+   "name": "Ghar Ka Tiffin",
+   "category": "restaurant",
+   "website": "https://www.tiffins.ae/",
+   "host": "tiffins.ae",
+   "address": "",
+   "email": "food@tiffins.ae",
+   "phone": "+971552039936",
+   "whatsapp": "971552039936",
+   "whatsappGuess": true,
+   "platform": "other",
+   "issues": [
+    "down"
+   ],
+   "loadMs": 262,
+   "checked": true,
+   "err": "ENOTFOUND",
+   "score": 9
+  },
+  {
+   "id": "n4141292520",
+   "name": "Bystro",
+   "category": "restaurant",
+   "website": "https://bystrodubai.com/",
+   "host": "bystrodubai.com",
+   "address": "دبي",
+   "email": "almanara@bystrodubai.com",
+   "phone": "+97143368056",
+   "whatsapp": "97143368056",
+   "whatsappGuess": true,
+   "platform": "other",
+   "issues": [
+    "down"
+   ],
+   "loadMs": 182,
+   "checked": true,
+   "err": "ENOTFOUND",
+   "score": 9
+  },
+  {
+   "id": "n3274670672",
+   "name": "@Falafel",
+   "category": "restaurant",
+   "website": "https://www.atfalafel.com/",
+   "host": "atfalafel.com",
+   "address": "King Salman bin Abdulaziz Al Saud Street",
+   "email": "info@atfalafel.com",
+   "phone": "+971555018345",
+   "whatsapp": "971555018345",
+   "whatsappGuess": true,
+   "platform": "other",
+   "issues": [
+    "down"
+   ],
+   "loadMs": 220,
+   "checked": true,
+   "err": "ENOTFOUND",
+   "score": 9
+  },
+  {
+   "id": "n7608610267",
+   "name": "Indian Summer",
+   "category": "restaurant",
+   "website": "https://www.indiansummeruae.com/",
+   "host": "indiansummeruae.com",
+   "address": "26 شارع 24 دبي",
+   "email": "info@indiansummeruae.com",
+   "phone": "+97143426760",
+   "whatsapp": "97143426760",
+   "whatsappGuess": true,
+   "platform": "other",
+   "issues": [
+    "down"
+   ],
+   "loadMs": 349,
+   "checked": true,
+   "err": "HTTP 530",
+   "score": 9
+  }
+ ]
+}
