@@ -221,6 +221,7 @@ $('scanBtn').onclick = async () => {
         setScanStatus(`Done. ${job.count} leads (${job.withEmail} with email, ${job.withWhatsapp} with WhatsApp).`);
         store.set('ls_lastjob', jobId);
         currentJob = job;
+        sendToSheet(job, false);
         showTab('leads');
         return;
       }
@@ -316,6 +317,7 @@ function renderLeads() {
   const leads = all.filter((l) => (!fE || l.email) && (!fW || l.whatsapp) && !(fH && sent[leadKey(l)] && (sent[leadKey(l)].email || sent[leadKey(l)].wa)));
   $('summary').textContent = `${currentJob.city}, ${currentJob.country} · ${all.length} leads · ${currentJob.withEmail} email · ${currentJob.withWhatsapp} WhatsApp · showing ${leads.length}`;
   $('bulkBtn').hidden = !(settings.scriptUrl && settings.scriptSecret);
+  $('sheetBtn').hidden = $('bulkBtn').hidden;
   if (!leads.length) { $('list').innerHTML = '<div class="empty">Nothing to show with these filters.</div>'; return; }
 
   $('list').innerHTML = leads.map((l, idx) => {
@@ -393,6 +395,30 @@ $('bulkBtn').onclick = async () => {
     alert('Failed: ' + e.message);
   }
 };
+
+// save leads to the user's Google Sheet through their Apps Script
+async function sendToSheet(job, manual) {
+  if (!settings.scriptUrl || !settings.scriptSecret) {
+    if (manual) alert('Add the Google Script URL and secret in Settings first.');
+    return;
+  }
+  const rows = (job.leads || []).map((l) => ({
+    date: (job.createdAt || '').slice(0, 10), city: job.city, country: job.country,
+    category: CATEGORIES[l.category] || l.category || '', name: l.name, website: l.website, host: l.host,
+    email: l.email || '', phone: l.phone || '', whatsapp: l.whatsapp || '',
+    issues: (l.issues || []).map((i) => ISSUE_LABEL[i] || i).join(', '), platform: l.platform || '', score: l.score || 0,
+  }));
+  try {
+    await fetch(settings.scriptUrl, {
+      method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ secret: settings.scriptSecret, action: 'sheet', rows }),
+    });
+    if (manual) alert(`Sent ${rows.length} leads to your Google Sheet. Open the sheet to check.`);
+  } catch (e) {
+    if (manual) alert('Failed: ' + e.message);
+  }
+}
+$('sheetBtn').onclick = () => currentJob && sendToSheet(currentJob, true);
 
 // ---------------- settings ----------------
 function loadSettingsForm() {
