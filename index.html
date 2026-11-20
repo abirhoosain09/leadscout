@@ -10,7 +10,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="icons/icon.svg">
-<link rel="stylesheet" href="style.css?v=7">
+<link rel="stylesheet" href="style.css?v=8">
 <title>LeadScout</title>
 </head>
 <body>
@@ -103,6 +103,8 @@
     </div>
     <button id="saveBtn" class="primary">Save settings</button>
     <button id="linkBtn" class="secondary">Copy setup link for another device</button>
+    <button id="qrBtn" class="secondary">Show QR code for another device (scan with phone camera)</button>
+    <div id="qrBox" style="text-align:center;margin-top:10px"></div>
     <button id="updateBtn" class="primary" style="background:#475569">Update app (clear cache, keeps settings)</button>
     <p class="hint">Save first. Open the link once on a new phone or PC and it connects itself. The link contains your token, so send it only to yourself.</p>
     <p id="saveStatus" class="status"></p>
@@ -115,6 +117,7 @@
   <button data-tab="settings">Settings</button>
 </nav>
 
-<script src="app.js?v=7"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+<script src="app.js?v=8"></script>
 </body>
 </html>
