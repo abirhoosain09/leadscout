@@ -168,14 +168,14 @@ async function overpass(query) {
     'https://overpass.private.coffee/api/interpreter',
   ];
   let lastErr = 'unknown';
-  for (let round = 0; round < 2; round++) {
+  for (let round = 0; round < 1; round++) {
     for (const ep of endpoints) {
       try {
         const r = await apiFetch(ep, {
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
           body: 'data=' + encodeURIComponent(query),
-        }, 90000);
+        }, 55000);
         if (r.ok) return await r.json();
         lastErr = ep + ' -> ' + r.status;
       } catch (e) {
@@ -197,7 +197,7 @@ function buildQuery(bb, catKeys) {
       parts.push(`nwr["${k}"="${v}"]["contact:website"](${box});`);
     }
   }
-  return `[out:json][timeout:80];(${parts.join('')});out center tags 1500;`;
+  return `[out:json][timeout:45];(${parts.join('')});out center tags 1500;`;
 }
 
 function catOf(tags) {
@@ -389,8 +389,27 @@ async function main() {
   console.log(`Scanning ${CITY}, ${COUNTRY} for: ${cats.join(', ')}`);
   const bb = await geocode();
   await sleep(1100);
-  const data = await overpass(buildQuery(bb, cats));
-  console.log('Overpass elements:', data.elements.length);
+  // one small query per category: a single huge union often times out on the free Overpass servers
+  const elements = [];
+  let okCount = 0;
+  let lastErr = '';
+  for (const key of cats) {
+    if (Date.now() - START > 8 * 60 * 1000) {
+      console.log('Discovery time budget reached, continuing with what we have');
+      break;
+    }
+    try {
+      const d = await overpass(buildQuery(bb, [key]));
+      elements.push(...d.elements);
+      okCount++;
+    } catch (e) {
+      lastErr = e.message;
+      console.log('category failed:', key, e.message);
+    }
+    await sleep(1500);
+  }
+  if (!okCount) throw new Error(lastErr || 'Overpass failed');
+  console.log('Overpass elements:', elements.length);
 
   let seen = [];
   try {
@@ -399,7 +418,7 @@ async function main() {
   const seenSet = new Set(seen);
 
   const byHost = new Map();
-  for (const el of data.elements) {
+  for (const el of elements) {
     const t = el.tags || {};
     const website = normUrl(t.website || t['contact:website']);
     const host = hostOf(website);
