@@ -10,7 +10,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="icons/icon.svg">
-<link rel="stylesheet" href="style.css?v=11">
+<link rel="stylesheet" href="style.css?v=12">
 <title>LeadScout</title>
 </head>
 <body>
@@ -48,8 +48,8 @@
     </div>
 
     <div class="card">
-      <label class="chk" style="margin-top:2px"><input type="checkbox" id="optRunning" checked> Only running businesses (skip dead websites)</label>
-      <label class="chk" style="margin-top:8px"><input type="checkbox" id="optOld" checked> Only businesses with an old / problem website</label>
+      <label class="chk" style="margin-top:2px"><input type="checkbox" id="optRunning" checked> Only running businesses (skip closed ones)</label>
+      <label class="chk" style="margin-top:8px"><input type="checkbox" id="optNoSite" checked> Also include running businesses with no website (offer a new website)</label>
       <label style="margin-top:12px">How many leads (max 100)
         <input id="limit" type="number" min="10" max="100" value="100">
       </label>
@@ -120,6 +120,6 @@
 </nav>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
-<script src="app.js?v=11"></script>
+<script src="app.js?v=12"></script>
 </body>
 </html>
