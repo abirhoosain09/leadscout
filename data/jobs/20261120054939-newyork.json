@@ -1,0 +1,415 @@
+{
+ "id": "20261120054939-newyork",
+ "createdAt": "2026-11-20T05:51:03.233Z",
+ "country": "United States",
+ "city": "New York",
+ "categories": [
+  "clinic"
+ ],
+ "count": 20,
+ "withEmail": 19,
+ "withWhatsapp": 19,
+ "leads": [
+  {
+   "id": "n2568243099",
+   "name": "Prominis Clinton Hill",
+   "category": "clinic",
+   "website": "https://www.prominis.com/clinton-hill",
+   "host": "prominis.com",
+   "address": "332 DeKalb Avenue",
+   "email": "",
+   "phone": "+17188525252",
+   "whatsapp": "17188525252",
+   "whatsappGuess": true,
+   "platform": "other",
+   "issues": [
+    "down"
+   ],
+   "loadMs": 349,
+   "checked": true,
+   "err": "HTTP 404",
+   "score": 6
+  },
+  {
+   "id": "n5491145068",
+   "name": "Forest Hills Audiology",
+   "category": "clinic",
+   "website": "https://www.foresthillsaudiology.com/",
+   "host": "foresthillsaudiology.com",
+   "address": "110-11 72nd Avenue Forest Hills",
+   "email": "dr.borukhov@aol.com",
+   "phone": "+17185772235",
+   "whatsapp": "17185772235",
+   "whatsappGuess": true,
+   "platform": "wordpress",
+   "issues": [
+    "slow"
+   ],
+   "loadMs": 3972,
+   "checked": true,
+   "err": "",
+   "score": 6
+  },
+  {
+   "id": "n12663224289",
+   "name": "Alexander Perkelvald MD / Vita Oklander PA",
+   "category": "clinic",
+   "website": "https://nycendocrinology.com/",
+   "host": "nycendocrinology.com",
+   "address": "1720 East 14th Street",
+   "email": "aperkelvaldmd@gmail.com",
+   "phone": "+17183683333",
+   "whatsapp": "17183683333",
+   "whatsappGuess": true,
+   "platform": "other",
+   "issues": [
+    "not_wp"
+   ],
+   "loadMs": 336,
+   "checked": true,
+   "err": "",
+   "score": 5
+  },
+  {
+   "id": "n2549983048",
+   "name": "One Medical",
+   "category": "clinic",
+   "website": "https://www.onemedical.com/locations/nyc/cobblehill/",
+   "host": "onemedical.com",
+   "address": "165 Smith Street Brooklyn",
+   "email": "techsupport@onemedical.com",
+   "phone": "+12124414380",
+   "whatsapp": "12124414380",
+   "whatsappGuess": true,
+   "platform": "other",
+   "issues": [
+    "not_wp"
+   ],
+   "loadMs": 76,
+   "checked": true,
+   "err": "",
+   "score": 5
+  },
+  {
+   "id": "n12731866630",
+   "name": "Ocean Radiology",
+   "category": "clinic",
+   "website": "https://www.oceanradiology.com/",
+   "host": "oceanradiology.com",
+   "address": "3049 Ocean Parkway",
+   "email": "info@oceanradiology.com",
+   "phone": "+17182651000",
+   "whatsapp": "17182651000",
+   "whatsappGuess": true,
+   "platform": "wix",
+   "issues": [
+    "not_wp"
+   ],
+   "loadMs": 104,
+   "checked": true,
+   "err": "",
+   "score": 5
+  },
+  {
+   "id": "n11817987599",
+   "name": "New Jersey Gynecomastia Center",
+   "category": "clinic",
+   "website": "https://newjerseygynecomastiacenter.com/",
+   "host": "newjerseygynecomastiacenter.com",
+   "address": "1567 Palisade Avenue Fort Lee",
+   "email": "hello@newjerseygynecomastiacenter.com",
+   "phone": "+15512011110",
+   "whatsapp": "15512011110",
+   "whatsappGuess": true,
+   "platform": "wordpress",
+   "issues": [
+    "no_meta_desc"
+   ],
+   "loadMs": 873,
+   "checked": true,
+   "err": "",
+   "score": 5
+  },
+  {
+   "id": "n2550066392",
+   "name": "EmèlleMD",
+   "category": "clinic",
+   "website": "https://www.emellemd.com/",
+   "host": "emellemd.com",
+   "address": "103 Bond Street",
+   "email": "dr@emellemd.com",
+   "phone": "+17187970789",
+   "whatsapp": "17187970789",
+   "whatsappGuess": true,
+   "platform": "squarespace",
+   "issues": [
+    "not_wp"
+   ],
+   "loadMs": 409,
+   "checked": true,
+   "err": "",
+   "score": 5
+  },
+  {
+   "id": "n12766117165",
+   "name": "HSS Brooklyn",
+   "category": "clinic",
+   "website": "https://www.hss.edu/locations/ny/brooklyn",
+   "host": "hss.edu",
+   "address": "148 39th Street Brooklyn",
+   "email": "employerconnect@hss.edu",
+   "phone": "+112126061000",
+   "whatsapp": "112126061000",
+   "whatsappGuess": true,
+   "platform": "other",
+   "issues": [
+    "not_wp"
+   ],
+   "loadMs": 192,
+   "checked": true,
+   "err": "",
+   "score": 5
+  },
+  {
+   "id": "n13382226866",
+   "name": "Moysik Medical Center",
+   "category": "clinic",
+   "website": "https://moysikmedicalcenter.com/our-centers-en/ocean-parkway-en/",
+   "host": "moysikmedicalcenter.com",
+   "address": "3000 Ocean Parkway Brooklyn",
+   "email": "office@moysikmed.com",
+   "phone": "+17182834444",
+   "whatsapp": "17182834444",
+   "whatsappGuess": true,
+   "platform": "wordpress",
+   "issues": [
+    "no_meta_desc"
+   ],
+   "loadMs": 297,
+   "checked": true,
+   "err": "",
+   "score": 5
+  },
+  {
+   "id": "n2561990010",
+   "name": "Terra Wellness",
+   "category": "clinic",
+   "website": "https://terrawellnessbk.com/",
+   "host": "terrawellnessbk.com",
+   "address": "153 East 4th Street",
+   "email": "jrobynchoi@gmail.com",
+   "phone": "+16468206160",
+   "whatsapp": "16468206160",
+   "whatsappGuess": true,
+   "platform": "wordpress",
+   "issues": [
+    "no_meta_desc"
+   ],
+   "loadMs": 560,
+   "checked": true,
+   "err": "",
+   "score": 5
+  },
+  {
+   "id": "n10873881858",
+   "name": "Nutley Foot and Ankle",
+   "category": "clinic",
+   "website": "https://www.nutleyfootandankle.com/",
+   "host": "nutleyfootandankle.com",
+   "address": "242 Washington Avenue Nutley Township",
+   "email": "website@nutleyfootandankle.com",
+   "phone": "+19736673412",
+   "whatsapp": "19736673412",
+   "whatsappGuess": true,
+   "platform": "wix",
+   "issues": [
+    "not_wp"
+   ],
+   "loadMs": 301,
+   "checked": true,
+   "err": "",
+   "score": 5
+  },
+  {
+   "id": "n13743976901",
+   "name": "Bushwick Health Center",
+   "category": "clinic",
+   "website": "https://www.nyc.gov/site/doh/health/neighborhood-health/health-center-bushwick.page",
+   "host": "nyc.gov",
+   "address": "335 Central Avenue",
+   "email": "therrera@health.nyc.gov",
+   "phone": "",
+   "whatsapp": "",
+   "whatsappGuess": false,
+   "platform": "other",
+   "issues": [
+    "no_meta_desc",
+    "not_wp"
+   ],
+   "loadMs": 781,
+   "checked": true,
+   "err": "",
+   "score": 5
+  },
+  {
+   "id": "n9665733567",
+   "name": "Mace Avenue Medical",
+   "category": "clinic",
+   "website": "https://maceavenuemedical.com/",
+   "host": "maceavenuemedical.com",
+   "address": "2460 Mickle Ave Bronx",
+   "email": "info@maceavemedical.com",
+   "phone": "+17186524647",
+   "whatsapp": "17186524647",
+   "whatsappGuess": true,
+   "platform": "other",
+   "issues": [
+    "not_wp"
+   ],
+   "loadMs": 1166,
+   "checked": true,
+   "err": "",
+   "score": 5
+  },
+  {
+   "id": "n5706940521",
+   "name": "Levit Dermatology Laser and Cosmetic Surgery",
+   "category": "clinic",
+   "website": "https://levitdermatology.com/",
+   "host": "levitdermatology.com",
+   "address": "West End Avenue Brooklyn",
+   "email": "skin@levitdermatology.com",
+   "phone": "+17183757546",
+   "whatsapp": "17183757546",
+   "whatsappGuess": true,
+   "platform": "other",
+   "issues": [
+    "not_wp"
+   ],
+   "loadMs": 925,
+   "checked": true,
+   "err": "",
+   "score": 5
+  },
+  {
+   "id": "n2550112119",
+   "name": "Prime Care Medical Group P.C.",
+   "category": "clinic",
+   "website": "https://www.primecarenyc.com/",
+   "host": "primecarenyc.com",
+   "address": "168-06 Hillside Avenue Jamaica",
+   "email": "primecareny@aol.com",
+   "phone": "+17187397400",
+   "whatsapp": "17187397400",
+   "whatsappGuess": true,
+   "platform": "other",
+   "issues": [
+    "not_wp"
+   ],
+   "loadMs": 873,
+   "checked": true,
+   "err": "",
+   "score": 5
+  },
+  {
+   "id": "n2710845401",
+   "name": "Avicenna Cardiology",
+   "category": "clinic",
+   "website": "https://avicennacardiology.com/",
+   "host": "avicennacardiology.com",
+   "address": "15 Park Avenue",
+   "email": "info@avicennacardiology.com",
+   "phone": "+13475584094",
+   "whatsapp": "13475584094",
+   "whatsappGuess": true,
+   "platform": "other",
+   "issues": [
+    "not_wp"
+   ],
+   "loadMs": 221,
+   "checked": true,
+   "err": "",
+   "score": 5
+  },
+  {
+   "id": "n12073496601",
+   "name": "Ditmas Park Wellness",
+   "category": "clinic",
+   "website": "https://www.ditmasparkwellness.com/",
+   "host": "ditmasparkwellness.com",
+   "address": "1103 Cortelyou Road",
+   "email": "info@ditmasparkwellness.com",
+   "phone": "+17188664128",
+   "whatsapp": "17188664128",
+   "whatsappGuess": true,
+   "platform": "squarespace",
+   "issues": [
+    "not_wp"
+   ],
+   "loadMs": 406,
+   "checked": true,
+   "err": "",
+   "score": 5
+  },
+  {
+   "id": "n5772891420",
+   "name": "Dr. Karim A. Badawy, D.P.M.",
+   "category": "clinic",
+   "website": "https://www.footanklerestore.com/",
+   "host": "footanklerestore.com",
+   "address": "551 Central Avenue Cedarhurst",
+   "email": "footanklerestore@gmail.com",
+   "phone": "+15165693009",
+   "whatsapp": "15165693009",
+   "whatsappGuess": true,
+   "platform": "wordpress",
+   "issues": [
+    "no_meta_desc"
+   ],
+   "loadMs": 361,
+   "checked": true,
+   "err": "",
+   "score": 5
+  },
+  {
+   "id": "n2797243217",
+   "name": "Lenox Hill Radiology",
+   "category": "clinic",
+   "website": "https://www.radnet.com/lenox-hill-radiology/locations/doshi-diagnostic-imaging-services-washington-heights",
+   "host": "radnet.com",
+   "address": "4120 Broadway",
+   "email": "lhr-info@radnet.com",
+   "phone": "+12127723111",
+   "whatsapp": "12127723111",
+   "whatsappGuess": true,
+   "platform": "other",
+   "issues": [
+    "not_wp"
+   ],
+   "loadMs": 113,
+   "checked": true,
+   "err": "",
+   "score": 5
+  },
+  {
+   "id": "n11484334629",
+   "name": "181st Street Urgent Care Center",
+   "category": "clinic",
+   "website": "https://www.urgentcare181.com/",
+   "host": "urgentcare181.com",
+   "address": "521 West 181st Street",
+   "email": "urgentcare@ccnmedicine.com",
+   "phone": "+13477566000",
+   "whatsapp": "13477566000",
+   "whatsappGuess": true,
+   "platform": "other",
+   "issues": [
+    "not_wp"
+   ],
+   "loadMs": 264,
+   "checked": true,
+   "err": "",
+   "score": 5
+  }
+ ]
+}
