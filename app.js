@@ -204,15 +204,19 @@ function needSettings() {
 }
 const needToken = () => !settings.token;
 async function gh(pathname, opts = {}, raw = false) {
-  const r = await fetch('https://api.github.com' + pathname, {
-    ...opts,
-    headers: {
-      ...(settings.token ? { Authorization: 'Bearer ' + settings.token } : {}),
-      Accept: raw ? 'application/vnd.github.raw+json' : 'application/vnd.github+json',
-      'X-GitHub-Api-Version': '2022-11-28',
-      ...(opts.headers || {}),
-    },
-  });
+  const call = (auth) =>
+    fetch('https://api.github.com' + pathname, {
+      ...opts,
+      headers: {
+        ...(auth ? { Authorization: 'Bearer ' + settings.token } : {}),
+        Accept: raw ? 'application/vnd.github.raw+json' : 'application/vnd.github+json',
+        'X-GitHub-Api-Version': '2022-11-28',
+        ...(opts.headers || {}),
+      },
+    });
+  let r = await call(!!settings.token);
+  // a wrong/expired token must not block reading a public repo: retry without it
+  if (r.status === 401 && settings.token && (opts.method || 'GET') === 'GET') r = await call(false);
   return r;
 }
 const repoPath = () => `/repos/${settings.owner}/${settings.repo}`;
@@ -248,6 +252,7 @@ $('scanBtn').onclick = async () => {
       method: 'POST',
       body: JSON.stringify({ ref: branch, inputs: { job_id: jobId, country, city, categories: [...selCats].join(','), limit: String(limit) } }),
     });
+    if (r.status === 401) throw new Error('This device has a wrong or expired token (401). Open a fresh setup link or paste the token again in Settings.');
     if (r.status !== 204) {
       const t = await r.text();
       throw new Error('Could not start the scan (' + r.status + '). Check the token permissions and that Actions is enabled.\n' + t.slice(0, 200));
@@ -313,7 +318,7 @@ $('updateBtn').onclick = async () => {
   } catch {}
   location.reload();
 };
-const APP_VERSION = '2026-11-20.6';
+const APP_VERSION = '2026-11-20.7';
 $('hdrInfo').textContent = 'v' + APP_VERSION;
 ['fEmail', 'fWa', 'fHide'].forEach((id) => ($(id).onchange = renderLeads));
 
