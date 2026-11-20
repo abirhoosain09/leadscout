@@ -283,10 +283,13 @@ async function loadJobList() {
   try {
     const branch = await getBranch();
     const r = await gh(`${repoPath()}/contents/data/jobs?ref=${branch}&t=${Date.now()}`);
+    if (!r.ok && r.status !== 404) {
+      throw new Error(`Could not load the scan list (HTTP ${r.status}). ` + (r.status === 401 ? 'Your token is wrong or expired: open a fresh setup link.' : r.status === 403 ? 'GitHub limit reached or the token lacks permission. Try again in a few minutes.' : ''));
+    }
     let files = r.ok ? (await r.json()).filter((f) => f.name.endsWith('.json')).map((f) => f.name.replace('.json', '')) : [];
     files.sort().reverse();
     const sel = $('jobSel');
-    const want = (currentJob && currentJob.id) || store.get('ls_lastjob', files[0]);
+    const want = (currentJob && currentJob.id) || files[0];
     sel.innerHTML = files.map((f) => `<option value="${esc(f)}"${f === want ? ' selected' : ''}>${esc(prettyJob(f))}</option>`).join('');
     if (!files.length) { $('list').innerHTML = '<div class="empty">No scans yet. Go to the Scan tab.</div>'; $('summary').textContent = ''; return; }
     await openJob(sel.value);
@@ -299,6 +302,19 @@ function prettyJob(id) {
   return m ? `${m[1]}-${m[2]}-${m[3]} ${m[4]}:${m[5]} · ${id.split('-')[1] || ''}` : id;
 }
 $('jobSel').onchange = () => openJob($('jobSel').value);
+$('refreshBtn').onclick = () => { currentJob = null; loadJobList(); };
+$('updateBtn').onclick = async () => {
+  $('saveStatus').textContent = 'Updating…';
+  try {
+    for (const k of await caches.keys()) await caches.delete(k);
+    const regs = await navigator.serviceWorker.getRegistrations();
+    for (const r of regs) await r.unregister();
+    await Promise.all(['app.js', 'style.css', 'index.html', './'].map((f) => fetch(f, { cache: 'reload' }).catch(() => {})));
+  } catch {}
+  location.reload();
+};
+const APP_VERSION = '2026-11-20.6';
+$('hdrInfo').textContent = 'v' + APP_VERSION;
 ['fEmail', 'fWa', 'fHide'].forEach((id) => ($(id).onchange = renderLeads));
 
 async function openJob(id) {
