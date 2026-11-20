@@ -67,8 +67,10 @@
         <label class="chk"><input type="checkbox" id="fWa"> Has WhatsApp</label>
         <label class="chk"><input type="checkbox" id="fHide" checked> Hide sent</label>
       </div>
-      <b style="display:block;margin-top:12px;font-size:14px">Filter by website problem</b>
-      <div id="fIssues" class="chips"></div>
+      <div id="fWrap" hidden>
+        <b style="display:block;margin-top:12px;font-size:14px">Filter by website problem</b>
+        <div id="fIssues" class="chips"></div>
+      </div>
       <div id="summary" class="status"></div>
       <button id="sheetBtn" class="secondary" hidden>Save these leads to Google Sheet</button>
       <button id="bulkBtn" class="secondary" hidden>Send all emails now (Gmail script)</button>
@@ -99,6 +101,8 @@
       <label>Secret <input id="sSecret" type="password" autocapitalize="off"></label>
     </div>
     <button id="saveBtn" class="primary">Save settings</button>
+    <button id="linkBtn" class="secondary">Copy setup link for another device</button>
+    <p class="hint">Save first. Open the link once on a new phone or PC and it connects itself. The link contains your token, so send it only to yourself.</p>
     <p id="saveStatus" class="status"></p>
   </section>
 </main>
