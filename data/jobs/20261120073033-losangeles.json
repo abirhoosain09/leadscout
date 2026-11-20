@@ -1,0 +1,436 @@
+{
+ "id": "20261120073033-losangeles",
+ "createdAt": "2026-11-20T07:38:06.430Z",
+ "country": "United States",
+ "city": "Los Angeles",
+ "categories": [
+  "bar_pub",
+  "nightclub",
+  "ice_cream"
+ ],
+ "count": 20,
+ "withEmail": 4,
+ "withWhatsapp": 20,
+ "leads": [
+  {
+   "id": "w425652780",
+   "name": "The Short Stop",
+   "category": "bar_pub",
+   "website": "",
+   "host": "nosite-w425652780",
+   "noSite": true,
+   "address": "1455 West Sunset Boulevard Los Angeles",
+   "email": "theshortstopevents@gmail.com",
+   "phone": "+12134824942",
+   "whatsapp": "12134824942",
+   "platform": "none",
+   "issues": [
+    "no_website"
+   ],
+   "checked": true,
+   "loadMs": 0,
+   "err": "",
+   "whatsappGuess": true,
+   "score": 12
+  },
+  {
+   "id": "w89827060",
+   "name": "Club Tee Gee",
+   "category": "bar_pub",
+   "website": "",
+   "host": "nosite-w89827060",
+   "noSite": true,
+   "address": "3210 Glendale Boulevard Los Angeles",
+   "email": "clubteegeeatwater@gmail.com",
+   "phone": "+13234076848",
+   "whatsapp": "13234076848",
+   "platform": "none",
+   "issues": [
+    "no_website"
+   ],
+   "checked": true,
+   "loadMs": 0,
+   "err": "",
+   "whatsappGuess": true,
+   "score": 12
+  },
+  {
+   "id": "w339856285",
+   "name": "Rocket Fizz",
+   "category": "ice_cream",
+   "website": "",
+   "host": "nosite-w339856285",
+   "noSite": true,
+   "address": "14613 Ventura Boulevard Sherman Oaks",
+   "email": "",
+   "phone": "+18189819009",
+   "whatsapp": "18189819009",
+   "platform": "none",
+   "issues": [
+    "no_website"
+   ],
+   "checked": true,
+   "loadMs": 0,
+   "err": "",
+   "whatsappGuess": true,
+   "score": 9
+  },
+  {
+   "id": "n3439778857",
+   "name": "Big Dean's OceanFront Cafe",
+   "category": "bar_pub",
+   "website": "",
+   "host": "nosite-n3439778857",
+   "noSite": true,
+   "address": "1615 Ocean Front Walk Santa Monica",
+   "email": "",
+   "phone": "+13103932666",
+   "whatsapp": "13103932666",
+   "platform": "none",
+   "issues": [
+    "no_website"
+   ],
+   "checked": true,
+   "loadMs": 0,
+   "err": "",
+   "whatsappGuess": true,
+   "score": 9
+  },
+  {
+   "id": "n1028939685",
+   "name": "Motherlode",
+   "category": "bar_pub",
+   "website": "",
+   "host": "nosite-n1028939685",
+   "noSite": true,
+   "address": "8944 Santa Monica Boulevard West Hollywood",
+   "email": "",
+   "phone": "+13106599700",
+   "whatsapp": "13106599700",
+   "platform": "none",
+   "issues": [
+    "no_website"
+   ],
+   "checked": true,
+   "loadMs": 0,
+   "err": "",
+   "whatsappGuess": true,
+   "score": 9
+  },
+  {
+   "id": "w1210227290",
+   "name": "Manzanitas las Originales",
+   "category": "ice_cream",
+   "website": "",
+   "host": "nosite-w1210227290",
+   "noSite": true,
+   "address": "120 Maclay Street San Fernando",
+   "email": "",
+   "phone": "+18183229089",
+   "whatsapp": "18183229089",
+   "platform": "none",
+   "issues": [
+    "no_website"
+   ],
+   "checked": true,
+   "loadMs": 0,
+   "err": "",
+   "whatsappGuess": true,
+   "score": 9
+  },
+  {
+   "id": "n13563106684",
+   "name": "Water Planet",
+   "category": "ice_cream",
+   "website": "",
+   "host": "nosite-n13563106684",
+   "noSite": true,
+   "address": "15132 Paramount Boulevard Paramount",
+   "email": "",
+   "phone": "+15624081530",
+   "whatsapp": "15624081530",
+   "platform": "none",
+   "issues": [
+    "no_website"
+   ],
+   "checked": true,
+   "loadMs": 0,
+   "err": "",
+   "whatsappGuess": true,
+   "score": 9
+  },
+  {
+   "id": "w451459228",
+   "name": "VEGANO By Stick-Station",
+   "category": "ice_cream",
+   "website": "https://www.vegano.io/",
+   "host": "vegano.io",
+   "noSite": false,
+   "address": "5454 East Washington Boulevard Commerce",
+   "email": "brandon@stick-station.com",
+   "phone": "+13232464441",
+   "whatsapp": "13232464441",
+   "whatsappGuess": true,
+   "platform": "other",
+   "issues": [
+    "down"
+   ],
+   "loadMs": 495,
+   "checked": true,
+   "err": "ENOTFOUND",
+   "score": 9
+  },
+  {
+   "id": "n13712275801",
+   "name": "Okrumong",
+   "category": "ice_cream",
+   "website": "",
+   "host": "nosite-n13712275801",
+   "noSite": true,
+   "address": "2814 Sepulveda Boulevard",
+   "email": "",
+   "phone": "+13105179558",
+   "whatsapp": "13105179558",
+   "platform": "none",
+   "issues": [
+    "no_website"
+   ],
+   "checked": true,
+   "loadMs": 0,
+   "err": "",
+   "whatsappGuess": true,
+   "score": 9
+  },
+  {
+   "id": "w340025397",
+   "name": "Cold Stone Creamery",
+   "category": "ice_cream",
+   "website": "",
+   "host": "nosite-w340025397",
+   "noSite": true,
+   "address": "14622 Ventura Boulevard #119 Sherman Oaks",
+   "email": "",
+   "phone": "+18189072702",
+   "whatsapp": "18189072702",
+   "platform": "none",
+   "issues": [
+    "no_website"
+   ],
+   "checked": true,
+   "loadMs": 0,
+   "err": "",
+   "whatsappGuess": true,
+   "score": 9
+  },
+  {
+   "id": "n4400518198",
+   "name": "Veranda Poolside Lounge",
+   "category": "bar_pub",
+   "website": "",
+   "host": "nosite-n4400518198",
+   "noSite": true,
+   "address": "",
+   "email": "",
+   "phone": "+12136278971",
+   "whatsapp": "12136278971",
+   "platform": "none",
+   "issues": [
+    "no_website"
+   ],
+   "checked": true,
+   "loadMs": 0,
+   "err": "",
+   "whatsappGuess": true,
+   "score": 9
+  },
+  {
+   "id": "n5908815773",
+   "name": "Vermont Karaoke and Billiards",
+   "category": "bar_pub",
+   "website": "",
+   "host": "nosite-n5908815773",
+   "noSite": true,
+   "address": "191 South Vermont Avenue Los Angeles",
+   "email": "",
+   "phone": "+12133853337",
+   "whatsapp": "12133853337",
+   "platform": "none",
+   "issues": [
+    "no_website"
+   ],
+   "checked": true,
+   "loadMs": 0,
+   "err": "",
+   "whatsappGuess": true,
+   "score": 9
+  },
+  {
+   "id": "w442310723",
+   "name": "Paddy O'Brien's Irish Pub",
+   "category": "bar_pub",
+   "website": "",
+   "host": "nosite-w442310723",
+   "noSite": true,
+   "address": "1517 Aviation Boulevard Redondo Beach",
+   "email": "",
+   "phone": "+13103724532",
+   "whatsapp": "13103724532",
+   "platform": "none",
+   "issues": [
+    "no_website"
+   ],
+   "checked": true,
+   "loadMs": 0,
+   "err": "",
+   "whatsappGuess": true,
+   "score": 9
+  },
+  {
+   "id": "n11903069869",
+   "name": "The Candy Cat Too",
+   "category": "nightclub",
+   "website": "",
+   "host": "nosite-n11903069869",
+   "noSite": true,
+   "address": "6816 Winnetka Avenue",
+   "email": "",
+   "phone": "+18189993187",
+   "whatsapp": "18189993187",
+   "platform": "none",
+   "issues": [
+    "no_website"
+   ],
+   "checked": true,
+   "loadMs": 0,
+   "err": "",
+   "whatsappGuess": true,
+   "score": 9
+  },
+  {
+   "id": "n5207270058",
+   "name": "The Chapel at The Abbey",
+   "category": "nightclub",
+   "website": "https://www.theabbeyweho.com/thechapel",
+   "host": "theabbeyweho.com",
+   "noSite": false,
+   "address": "696 North Robertson Boulevard West Hollywood",
+   "email": "abbey@theabbeyweho.com",
+   "phone": "+13102898410",
+   "whatsapp": "13102898410",
+   "whatsappGuess": true,
+   "platform": "other",
+   "issues": [
+    "down"
+   ],
+   "loadMs": 2517,
+   "checked": true,
+   "err": "HTTP 404",
+   "score": 9
+  },
+  {
+   "id": "n10863419952",
+   "name": "Crimsin",
+   "category": "bar_pub",
+   "website": "",
+   "host": "nosite-n10863419952",
+   "noSite": true,
+   "address": "345 West 6th Street San Pedro",
+   "email": "",
+   "phone": "+14245700514",
+   "whatsapp": "14245700514",
+   "platform": "none",
+   "issues": [
+    "no_website"
+   ],
+   "checked": true,
+   "loadMs": 0,
+   "err": "",
+   "whatsappGuess": true,
+   "score": 9
+  },
+  {
+   "id": "n5436501391",
+   "name": "The Flight Low",
+   "category": "bar_pub",
+   "website": "",
+   "host": "nosite-n5436501391",
+   "noSite": true,
+   "address": "3000 Los Feliz Boulevard Los Angeles",
+   "email": "",
+   "phone": "+13236440444",
+   "whatsapp": "13236440444",
+   "platform": "none",
+   "issues": [
+    "no_website"
+   ],
+   "checked": true,
+   "loadMs": 0,
+   "err": "",
+   "whatsappGuess": true,
+   "score": 9
+  },
+  {
+   "id": "n10863414570",
+   "name": "Sweet Susie Candy Shop",
+   "category": "ice_cream",
+   "website": "",
+   "host": "nosite-n10863414570",
+   "noSite": true,
+   "address": "461 West 6th Street San Pedro",
+   "email": "",
+   "phone": "+13105477499",
+   "whatsapp": "13105477499",
+   "platform": "none",
+   "issues": [
+    "no_website"
+   ],
+   "checked": true,
+   "loadMs": 0,
+   "err": "",
+   "whatsappGuess": true,
+   "score": 9
+  },
+  {
+   "id": "n13325068163",
+   "name": "Sakura-ya",
+   "category": "ice_cream",
+   "website": "",
+   "host": "nosite-n13325068163",
+   "noSite": true,
+   "address": "16134 South Western Avenue Gardena",
+   "email": "",
+   "phone": "+13103237117",
+   "whatsapp": "13103237117",
+   "platform": "none",
+   "issues": [
+    "no_website"
+   ],
+   "checked": true,
+   "loadMs": 0,
+   "err": "",
+   "whatsappGuess": true,
+   "score": 9
+  },
+  {
+   "id": "n8470629497",
+   "name": "Ann’s Wine Bar",
+   "category": "bar_pub",
+   "website": "",
+   "host": "nosite-n8470629497",
+   "noSite": true,
+   "address": "2301 Highland Ave",
+   "email": "",
+   "phone": "+13238501885",
+   "whatsapp": "13238501885",
+   "platform": "none",
+   "issues": [
+    "no_website"
+   ],
+   "checked": true,
+   "loadMs": 0,
+   "err": "",
+   "whatsappGuess": true,
+   "score": 9
+  }
+ ]
+}
