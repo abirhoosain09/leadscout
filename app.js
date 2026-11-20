@@ -96,7 +96,7 @@ const ISSUE_TEXT = {
 
 const ISSUE_LABEL = {
   down: 'Site down', no_https: 'No HTTPS', no_viewport: 'Not mobile', slow: 'Slow', old_wp: 'Old WordPress',
-  outdated_year: 'Dated', no_meta_desc: 'No SEO desc', not_wp: 'Not WordPress', legacy_tech: 'Old tech',
+  outdated_year: 'Dated', no_meta_desc: 'No SEO desc', not_wp: 'Not WordPress', legacy_tech: 'Old tech', no_website: 'No website',
 };
 
 const DEFAULT_DOC = 'https://docs.google.com/document/d/1cZBSV1VnnoP6MTmvV-URuDMyOpk1wYxiNycOZodYj8Y/edit';
@@ -264,7 +264,7 @@ $('scanBtn').onclick = async () => {
     const branch = await getBranch();
     const r = await gh(`${repoPath()}/actions/workflows/scan.yml/dispatches`, {
       method: 'POST',
-      body: JSON.stringify({ ref: branch, inputs: { job_id: jobId, country, city, categories: [...selCats].join(','), limit: String(limit), running_only: String($('optRunning').checked), old_only: String($('optOld').checked) } }),
+      body: JSON.stringify({ ref: branch, inputs: { job_id: jobId, country, city, categories: [...selCats].join(','), limit: String(limit), running_only: String($('optRunning').checked), no_website: String($('optNoSite').checked) } }),
     });
     if (r.status === 401) throw new Error('This device has a wrong or expired token (401). Open a fresh setup link or paste the token again in Settings.');
     if (r.status !== 204) {
@@ -332,7 +332,7 @@ $('updateBtn').onclick = async () => {
   } catch {}
   location.reload();
 };
-const APP_VERSION = '2026-11-20.11';
+const APP_VERSION = '2026-11-20.12';
 $('hdrInfo').textContent = 'v' + APP_VERSION;
 ['fEmail', 'fWa', 'fHide'].forEach((id) => ($(id).onchange = renderLeads));
 
@@ -366,6 +366,35 @@ function buildMessage(l) {
   };
   const bullets = list.slice(0, 5).map((i) => '- ' + issueLine(i)).join('\n');
   const svc = [...selSvcs].map((k) => SERVICES[k][li]).join(lang === 'ar' ? '، ' : ', ');
+
+  if ((l.issues || []).includes('no_website')) {
+    if (lang === 'ar') {
+      return `مرحباً فريق ${l.name}،
+
+لاحظت أن نشاطكم التجاري لا يملك موقعاً إلكترونياً حتى الآن. اليوم يبحث معظم العملاء على الإنترنت أولاً، والموقع يساعدكم على الظهور في جوجل وزيادة الاتصالات والحجوزات.
+
+أنا مطوّر ووردبريس، ويمكنني بناء موقع سريع ومتوافق مع الجوال لنشاطكم، مع: ${svc}.
+جهزت ملفاً مختصراً يوضح طريقة عملي: ${doc}
+يسعدني أن أرسل لكم فكرة مجانية للصفحة الرئيسية، بدون أي التزام.
+
+بانتظار ردكم هنا.
+
+مع التحية،
+${sig}`;
+    }
+    return `Hi ${l.name} team,
+
+I came across your business and noticed you don't have a website yet. Most customers search online first, so a website helps you get found on Google and get more calls and bookings.
+
+I'm a WordPress developer and I can build a fast, mobile-friendly website for your business, including: ${svc}.
+Here is a short note on how I work: ${doc}
+Happy to share a free homepage idea for ${l.name}, no obligation.
+
+Let me know here, I'm waiting for your reply.
+
+Best regards,
+${sig}`;
+  }
 
   if (lang === 'ar') {
     return `مرحباً فريق ${l.name}،
@@ -415,7 +444,7 @@ function renderLeads() {
       (l.checked === false ? '<span class="badge">Site not checked</span>' : `<span class="badge">${esc(l.platform || '')}</span>`) + (l.category ? `<span class="badge">${esc(CATEGORIES[l.category] || l.category)}</span>` : '');
     return `<div class="card lead${s.email || s.wa ? ' sent' : ''}" data-i="${idx}" data-k="${esc(k)}">
       <h3>${esc(l.name)}</h3>
-      <div class="meta"><a href="${esc(l.website)}" target="_blank" rel="noopener">${esc(l.host)}</a>${l.address ? ' · ' + esc(l.address) : ''}</div>
+      <div class="meta">${l.website ? `<a href="${esc(l.website)}" target="_blank" rel="noopener">${esc(l.host)}</a>` : '<b>No website</b>'}${l.address ? ' · ' + esc(l.address) : ''}</div>
       <div class="meta">${l.email ? '✉ ' + esc(l.email) : ''}${l.email && l.phone ? ' · ' : ''}${l.phone ? '☎ ' + esc(l.phone) : ''}</div>
       ${siteInfo(l) ? `<div class="meta">${esc(siteInfo(l))}</div>` : ''}
       <div class="badges">${badges}</div>
