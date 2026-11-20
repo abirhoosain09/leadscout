@@ -1,0 +1,426 @@
+{
+ "id": "20261120060249-dubai",
+ "createdAt": "2026-11-20T06:07:06.464Z",
+ "country": "United Arab Emirates",
+ "city": "Dubai",
+ "categories": [
+  "restaurant",
+  "dentist",
+  "salon",
+  "gym"
+ ],
+ "count": 20,
+ "withEmail": 20,
+ "withWhatsapp": 17,
+ "leads": [
+  {
+   "id": "n6260688192",
+   "name": "Monty's Rowing School",
+   "category": "gym",
+   "website": "http://www.montysrowingschool.com/",
+   "host": "montysrowingschool.com",
+   "address": "",
+   "email": "details@montysrowingschool.com",
+   "phone": "",
+   "whatsapp": "",
+   "whatsappGuess": false,
+   "platform": "other",
+   "issues": [
+    "no_https",
+    "no_viewport",
+    "not_wp"
+   ],
+   "loadMs": 135,
+   "checked": true,
+   "err": "",
+   "score": 10
+  },
+  {
+   "id": "n7238888343",
+   "name": "Italian Dental Clinic",
+   "category": "dentist",
+   "website": "https://www.italiandentalclinic.com/",
+   "host": "italiandentalclinic.com",
+   "address": "33",
+   "email": "marketing@italiandentalclinic.com",
+   "phone": "+97144580040",
+   "whatsapp": "97144580040",
+   "whatsappGuess": true,
+   "platform": "other",
+   "issues": [
+    "down"
+   ],
+   "loadMs": 509,
+   "checked": true,
+   "err": "HTTP 520",
+   "score": 9
+  },
+  {
+   "id": "n9681956665",
+   "name": "The Clippers",
+   "category": "salon",
+   "website": "https://theclippersuae.com/",
+   "host": "theclippersuae.com",
+   "address": "",
+   "email": "theclippersjlt@gmail.com",
+   "phone": "+971547686842",
+   "whatsapp": "971547686842",
+   "whatsappGuess": true,
+   "platform": "other",
+   "issues": [
+    "down"
+   ],
+   "loadMs": 124,
+   "checked": true,
+   "err": "ENOTFOUND",
+   "score": 9
+  },
+  {
+   "id": "n13742625913",
+   "name": "Home Salon by SAbeauti",
+   "category": "salon",
+   "website": "https://www.home-salon.ae/",
+   "host": "home-salon.ae",
+   "address": "G003 Dubai International Bowling Center - Shop G002 - 44th St - Al Mamzar - Deira Dubai",
+   "email": "info@sabeautisalon.com",
+   "phone": "+97142699700",
+   "whatsapp": "97142699818",
+   "whatsappGuess": false,
+   "platform": "other",
+   "issues": [
+    "outdated_year",
+    "no_meta_desc",
+    "not_wp"
+   ],
+   "loadMs": 324,
+   "checked": true,
+   "err": "",
+   "score": 9
+  },
+  {
+   "id": "n11012436587",
+   "name": "Pearls",
+   "category": "dentist",
+   "website": "https://www.pearlspolyclinic.com/",
+   "host": "pearlspolyclinic.com",
+   "address": "",
+   "email": "pearlspolyclinic@gmail.com",
+   "phone": "+97142387788",
+   "whatsapp": "97142387788",
+   "whatsappGuess": true,
+   "platform": "other",
+   "issues": [
+    "down"
+   ],
+   "loadMs": 183,
+   "checked": true,
+   "err": "ENOTFOUND",
+   "score": 9
+  },
+  {
+   "id": "n8024801669",
+   "name": "Medicazone",
+   "category": "dentist",
+   "website": "https://medicazoneclinic.com/",
+   "host": "medicazoneclinic.com",
+   "address": "",
+   "email": "info@medicazoneclinic.com",
+   "phone": "+97143383100",
+   "whatsapp": "97143383100",
+   "whatsappGuess": true,
+   "platform": "other",
+   "issues": [
+    "down"
+   ],
+   "loadMs": 125,
+   "checked": true,
+   "err": "ENOTFOUND",
+   "score": 9
+  },
+  {
+   "id": "n7843646154",
+   "name": "Adara ladies saloon",
+   "category": "salon",
+   "website": "https://adaraladiessaloon.ae/",
+   "host": "adaraladiessaloon.ae",
+   "address": "",
+   "email": "adarasaloon3@gmail.com",
+   "phone": "+97143335745",
+   "whatsapp": "97143335745",
+   "whatsappGuess": true,
+   "platform": "other",
+   "issues": [
+    "down"
+   ],
+   "loadMs": 30,
+   "checked": true,
+   "err": "ENOTFOUND",
+   "score": 9
+  },
+  {
+   "id": "n7756043212",
+   "name": "Barber GAZ Station",
+   "category": "salon",
+   "website": "https://www.barbergazstation.com/",
+   "host": "barbergazstation.com",
+   "address": "",
+   "email": "harleysgentssalon@gmail.com",
+   "phone": "+971553960343",
+   "whatsapp": "971553960343",
+   "whatsappGuess": true,
+   "platform": "other",
+   "issues": [
+    "down"
+   ],
+   "loadMs": 32,
+   "checked": true,
+   "err": "ENOTFOUND",
+   "score": 9
+  },
+  {
+   "id": "w256847506",
+   "name": "عيادة ميكريس لطب الأسنان",
+   "category": "dentist",
+   "website": "https://www.micrisdental.com/",
+   "host": "micrisdental.com",
+   "address": "108 Jumeira Street دبي",
+   "email": "marketing@micrisdental.com",
+   "phone": "+97143300441",
+   "whatsapp": "97143300441",
+   "whatsappGuess": true,
+   "platform": "other",
+   "issues": [
+    "down"
+   ],
+   "loadMs": 230,
+   "checked": true,
+   "err": "HTTP 520",
+   "score": 9
+  },
+  {
+   "id": "n7362504378",
+   "name": "The Man Cave",
+   "category": "salon",
+   "website": "https://themancave.ae/",
+   "host": "themancave.ae",
+   "address": "",
+   "email": "appointments@themancavedxb.ae",
+   "phone": "+97143403101",
+   "whatsapp": "97143403101",
+   "whatsappGuess": true,
+   "platform": "other",
+   "issues": [
+    "down"
+   ],
+   "loadMs": 34,
+   "checked": true,
+   "err": "ENOTFOUND",
+   "score": 9
+  },
+  {
+   "id": "n7208524235",
+   "name": "Quality Fix Gents Salon",
+   "category": "salon",
+   "website": "https://www.qualityfix.ae/",
+   "host": "qualityfix.ae",
+   "address": "Dubai",
+   "email": "info@qualityfix.ae",
+   "phone": "+97142823403",
+   "whatsapp": "97142823403",
+   "whatsappGuess": true,
+   "platform": "other",
+   "issues": [
+    "down"
+   ],
+   "loadMs": 87,
+   "checked": true,
+   "err": "ENOTFOUND",
+   "score": 9
+  },
+  {
+   "id": "n8024801668",
+   "name": "Dental Zone",
+   "category": "dentist",
+   "website": "https://www.dentalzone.tv/",
+   "host": "dentalzone.tv",
+   "address": "",
+   "email": "info@medicazoneclinic.com",
+   "phone": "+97143383100",
+   "whatsapp": "97143383100",
+   "whatsappGuess": true,
+   "platform": "other",
+   "issues": [
+    "down"
+   ],
+   "loadMs": 17,
+   "checked": true,
+   "err": "ENOTFOUND",
+   "score": 9
+  },
+  {
+   "id": "n4464631591",
+   "name": "Kholood Dental clinic,Citymart building,Al bustan,Ajman",
+   "category": "dentist",
+   "website": "http://kholooddentalclinicajman.com/",
+   "host": "kholooddentalclinicajman.com",
+   "address": "302 Al bustan",
+   "email": "drsudheerdentist@gmail.com",
+   "phone": "067471113",
+   "whatsapp": "",
+   "whatsappGuess": false,
+   "platform": "other",
+   "issues": [
+    "down"
+   ],
+   "loadMs": 177,
+   "checked": true,
+   "err": "ENOTFOUND",
+   "score": 8
+  },
+  {
+   "id": "n8894624310",
+   "name": "Ranim & John's Beauty Salon",
+   "category": "salon",
+   "website": "https://randjsalon.com/",
+   "host": "randjsalon.com",
+   "address": "Address fountain views شارع الشيخ محمد بن راشد دبي",
+   "email": "info@randjsalon.com",
+   "phone": "+971546600099",
+   "whatsapp": "971549900066",
+   "whatsappGuess": false,
+   "platform": "wordpress",
+   "issues": [
+    "outdated_year",
+    "no_meta_desc"
+   ],
+   "loadMs": 250,
+   "checked": true,
+   "err": "",
+   "score": 8
+  },
+  {
+   "id": "n7987381319",
+   "name": "Ringside",
+   "category": "gym",
+   "website": "https://ringsidegymglobal.com/",
+   "host": "ringsidegymglobal.com",
+   "address": "",
+   "email": "info@ringsidegymglobal.com",
+   "phone": "+97143251325",
+   "whatsapp": "97143251325",
+   "whatsappGuess": true,
+   "platform": "other",
+   "issues": [
+    "outdated_year",
+    "no_meta_desc",
+    "not_wp"
+   ],
+   "loadMs": 96,
+   "checked": true,
+   "err": "",
+   "score": 8
+  },
+  {
+   "id": "n4265652392",
+   "name": "Barbero Gentlemens Lounge",
+   "category": "salon",
+   "website": "http://www.barberodubai.com/",
+   "host": "barberodubai.com",
+   "address": "Al Sa'ada Street",
+   "email": "barberodubai@gmail.com",
+   "phone": "043203855",
+   "whatsapp": "",
+   "whatsappGuess": false,
+   "platform": "other",
+   "issues": [
+    "down"
+   ],
+   "loadMs": 29,
+   "checked": true,
+   "err": "ENOTFOUND",
+   "score": 8
+  },
+  {
+   "id": "n4535442028",
+   "name": "HairPlay Extensions",
+   "category": "salon",
+   "website": "https://hairplayextensions.com/",
+   "host": "hairplayextensions.com",
+   "address": "P-159 Sheikh Zayed Road",
+   "email": "hairplayextensions@gmail.com",
+   "phone": "+971552076588",
+   "whatsapp": "971552076588",
+   "whatsappGuess": false,
+   "platform": "wordpress",
+   "issues": [
+    "outdated_year"
+   ],
+   "loadMs": 1034,
+   "checked": true,
+   "err": "",
+   "score": 7
+  },
+  {
+   "id": "n9419432737",
+   "name": "Star Body Gym",
+   "category": "gym",
+   "website": "https://starbodygym.com/",
+   "host": "starbodygym.com",
+   "address": "شارع 24 Al Murar",
+   "email": "info@starbodygym.com",
+   "phone": "+97142715454",
+   "whatsapp": "97142715454",
+   "whatsappGuess": true,
+   "platform": "other",
+   "issues": [
+    "outdated_year",
+    "not_wp"
+   ],
+   "loadMs": 93,
+   "checked": true,
+   "err": "",
+   "score": 7
+  },
+  {
+   "id": "n7987384632",
+   "name": "Professional Hair Fixing",
+   "category": "clinic",
+   "website": "https://professionalhaircenter.com/",
+   "host": "professionalhaircenter.com",
+   "address": "",
+   "email": "hairfixingcenter@gmail.com",
+   "phone": "+97167433776",
+   "whatsapp": "971507635693",
+   "whatsappGuess": false,
+   "platform": "wordpress",
+   "issues": [
+    "slow"
+   ],
+   "loadMs": 4845,
+   "checked": true,
+   "err": "",
+   "score": 7
+  },
+  {
+   "id": "n10206814973",
+   "name": "Jacques La Coupe",
+   "category": "salon",
+   "website": "https://www.jacqueslacoupe.com/",
+   "host": "jacqueslacoupe.com",
+   "address": "",
+   "email": "jacqueslacoupejbr@yahoo.com",
+   "phone": "+97144458381",
+   "whatsapp": "97144458381",
+   "whatsappGuess": true,
+   "platform": "other",
+   "issues": [
+    "outdated_year",
+    "not_wp"
+   ],
+   "loadMs": 1312,
+   "checked": true,
+   "err": "",
+   "score": 7
+  }
+ ]
+}
