@@ -234,7 +234,8 @@ function emailPage_(p) {
   const body = v[COL.MESSAGE - 1];
   if (!EMAIL_RE.test(to)) return page_('<p>No valid email in this row.</p>');
   if (!body) return page_('<p>This row has no message text.</p>');
-  if (p.confirm === '1') {
+  // one click sends right away; only a row that was already emailed asks first
+  if (p.confirm === '1' || status !== 'Emailed') {
     if (!takeQuota_(1)) return page_('<p>Daily limit reached (' + DAILY_EMAIL_CAP + '). Try again tomorrow.</p>');
     GmailApp.sendEmail(to, subject, body, { name: SENDER_NAME });
     sh.getRange(row, COL.STATUS).setValue('Emailed');
