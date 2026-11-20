@@ -115,9 +115,11 @@ function addRows_(rows) {
   ss_().getSheets().filter(isDayTab_).forEach((sh) => {
     const n = sh.getLastRow();
     if (n >= FIRST_ROW && String(sh.getRange(2, 1).getValue()) === 'Select') {
-      sh.getRange(FIRST_ROW, COL.WEBSITE, n - FIRST_ROW + 1, 2).getValues().forEach((r) => {
+      sh.getRange(FIRST_ROW, COL.WEBSITE, n - FIRST_ROW + 1, 3).getValues().forEach((r) => {
         have.add('h:' + hostOf_(r[0]));
         if (r[1]) have.add('e:' + String(r[1]).toLowerCase());
+        const ph = String(r[2]).replace(/\D/g, '');
+        if (ph.length >= 7) have.add('p:' + ph);
       });
     }
   });
@@ -125,9 +127,12 @@ function addRows_(rows) {
   rows.forEach((r) => {
     const h = r.host || hostOf_(r.website);
     const em = r.email ? 'e:' + String(r.email).toLowerCase() : '';
-    if (!h || have.has('h:' + h) || (em && have.has(em))) return; // same website or same email = same business
+    const ph = String(r.phone || '').replace(/\D/g, '');
+    const pk = ph.length >= 7 ? 'p:' + ph : '';
+    if (!h || have.has('h:' + h) || (em && have.has(em)) || (pk && have.has(pk))) return; // same website, email or phone = same business
     have.add('h:' + h);
     if (em) have.add(em);
+    if (pk) have.add(pk);
     const day = r.date || today_();
     (byDay[day] = byDay[day] || []).push(r);
   });
