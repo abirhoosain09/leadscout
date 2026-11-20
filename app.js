@@ -105,6 +105,7 @@ function renderIssueFilters(all) {
   const counts = {};
   all.forEach((l) => (l.issues || []).forEach((i) => (counts[i] = (counts[i] || 0) + 1)));
   const el = $('fIssues');
+  $('fWrap').hidden = !Object.keys(counts).length;
   el.innerHTML = Object.keys(ISSUE_LABEL).filter((k) => counts[k])
     .map((k) => `<span class="chip${selIssues.has(k) ? ' on' : ''}" data-k="${k}">${esc(ISSUE_LABEL[k])} (${counts[k]})</span>`).join('');
   el.onclick = (e) => {
@@ -122,6 +123,20 @@ const store = {
   set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} },
 };
 let settings = store.get('ls_settings', {});
+const DEFAULTS = { owner: 'abirhoosain09', repo: 'leadscout', name: 'Abir Hossain' };
+Object.keys(DEFAULTS).forEach((k) => {
+  if (!settings[k] || (k !== 'name' && /\s/.test(settings[k]))) settings[k] = DEFAULTS[k];
+});
+// a "setup link" (…#cfg=...) carries this device's settings to a new device
+try {
+  const m = location.hash.match(/cfg=([^&]+)/);
+  if (m) {
+    const cfg = JSON.parse(decodeURIComponent(escape(atob(m[1].replace(/-/g, '+').replace(/_/g, '/')))));
+    settings = { ...settings, ...cfg };
+    store.set('ls_settings', settings);
+    history.replaceState(null, '', location.pathname + location.search);
+  }
+} catch {}
 let sent = store.get('ls_sent', {}); // leadKey -> {email:ts, wa:ts}
 let selCats = new Set(store.get('ls_cats', ['restaurant']));
 let selSvcs = new Set(store.get('ls_svcs', ['wp_new', 'redesign', 'speed', 'seo']));
@@ -185,13 +200,14 @@ $('lang').onchange = () => store.set('ls_lang', $('lang').value);
 
 // ---------------- GitHub API ----------------
 function needSettings() {
-  return !settings.owner || !settings.repo || !settings.token;
+  return !settings.owner || !settings.repo;
 }
+const needToken = () => !settings.token;
 async function gh(pathname, opts = {}, raw = false) {
   const r = await fetch('https://api.github.com' + pathname, {
     ...opts,
     headers: {
-      Authorization: 'Bearer ' + settings.token,
+      ...(settings.token ? { Authorization: 'Bearer ' + settings.token } : {}),
       Accept: raw ? 'application/vnd.github.raw+json' : 'application/vnd.github+json',
       'X-GitHub-Api-Version': '2022-11-28',
       ...(opts.headers || {}),
@@ -216,7 +232,7 @@ function setScanStatus(msg, err) {
 }
 
 $('scanBtn').onclick = async () => {
-  if (needSettings()) { showTab('settings'); $('saveStatus').textContent = 'Fill in the GitHub connection first.'; return; }
+  if (needSettings() || needToken()) { showTab('settings'); $('saveStatus').textContent = 'Paste your GitHub token here (or open your setup link) to start scans.'; return; }
   const country = $('country').value;
   const city = $('city').value === 'Other city…' ? $('cityCustom').value.trim() : $('city').value;
   if (!city) return setScanStatus('Type a city name.', true);
@@ -471,7 +487,20 @@ $('saveBtn').onclick = () => {
   defaultBranch = null;
   $('saveStatus').textContent = 'Saved on this device.';
 };
+$('linkBtn').onclick = async () => {
+  const keys = ['token', 'name', 'signature', 'site', 'scriptUrl', 'scriptSecret'];
+  const cfg = {};
+  keys.forEach((k) => { if (settings[k]) cfg[k] = settings[k]; });
+  const b64 = btoa(unescape(encodeURIComponent(JSON.stringify(cfg)))).replace(/\+/g, '-').replace(/\//g, '_');
+  const link = location.origin + location.pathname + '#cfg=' + b64;
+  try {
+    await navigator.clipboard.writeText(link);
+    $('saveStatus').textContent = 'Setup link copied. It contains your token: send it only to yourself and open it once on the new device.';
+  } catch {
+    prompt('Copy this link (send only to yourself):', link);
+  }
+};
 loadSettingsForm();
-if (needSettings()) showTab('settings');
+if (needToken()) setScanStatus('This device is not connected yet: open your setup link, or add the token in Settings. You can still view saved leads.');
 
 if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
