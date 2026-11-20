@@ -88,6 +88,24 @@ const ISSUE_LABEL = {
   outdated_year: 'Dated', no_meta_desc: 'No SEO desc', not_wp: 'Not WordPress',
 };
 
+const DEFAULT_DOC = 'https://docs.google.com/document/d/1cZBSV1VnnoP6MTmvV-URuDMyOpk1wYxiNycOZodYj8Y/edit';
+const DEFAULT_SIG = 'Abir Hossain\nWordPress Developer\nWhatsApp: +8801789025256';
+let selIssues = new Set();
+
+function renderIssueFilters(all) {
+  const counts = {};
+  all.forEach((l) => (l.issues || []).forEach((i) => (counts[i] = (counts[i] || 0) + 1)));
+  const el = $('fIssues');
+  el.innerHTML = Object.keys(ISSUE_LABEL).filter((k) => counts[k])
+    .map((k) => `<span class="chip${selIssues.has(k) ? ' on' : ''}" data-k="${k}">${esc(ISSUE_LABEL[k])} (${counts[k]})</span>`).join('');
+  el.onclick = (e) => {
+    const k = e.target.dataset && e.target.dataset.k;
+    if (!k) return;
+    selIssues.has(k) ? selIssues.delete(k) : selIssues.add(k);
+    renderLeads();
+  };
+}
+
 // ---------------- state ----------------
 const $ = (id) => document.getElementById(id);
 const store = {
@@ -274,37 +292,38 @@ const leadKey = (l) => (currentJob ? currentJob.id : '') + ':' + l.id;
 function buildMessage(l) {
   const lang = $('lang').value;
   const li = lang === 'ar' ? 1 : 0;
-  const me = settings.name || '[Your name]';
-  const agency = settings.agency || '[Agency]';
-  const issues = (l.issues || []).filter((i) => i !== 'not_wp' || (l.issues || []).length === 1).slice(0, 3);
-  const bullets = issues.map((i) => '- ' + ISSUE_TEXT[lang][i]).join('\n');
+  const sig = settings.signature || DEFAULT_SIG;
+  const doc = settings.site || DEFAULT_DOC;
+  const list = (l.issues || []).filter((i) => i !== 'not_wp' || (l.issues || []).length === 1);
+  const bullets = list.slice(0, 5).map((i) => '- ' + ISSUE_TEXT[lang][i]).join('\n');
   const svc = [...selSvcs].map((k) => SERVICES[k][li]).join(lang === 'ar' ? '، ' : ', ');
-  const site = settings.site ? (lang === 'ar' ? '\nأعمالي: ' : '\nMy work: ') + settings.site : '';
 
   if (lang === 'ar') {
     return `مرحباً فريق ${l.name}،
 
-اطلعت على موقعكم (${l.host})${bullets ? ' ولاحظت ما يلي:\n' + bullets : '، وأعتقد أنه يمكن تحسينه ليجلب لكم عملاء أكثر.'}
+اطلعت على موقعكم (${l.host})${bullets ? ' ووجدت النقاط التالية:\n' + bullets : '، وأعتقد أنه يمكن تحسينه ليجلب لكم عملاء أكثر.'}
 
-أنا ${me} من ${agency}، مطوّر مواقع ووردبريس. أستطيع مساعدتكم في: ${svc}.
-يسعدني إرسال تقرير مجاني مختصر مع الحلول، بدون أي التزام.${site}
+أنا مطوّر ووردبريس، ويمكنني إصلاح ذلك ومساعدتكم في: ${svc}.
+جهزت ملفاً مختصراً يوضح كيف يمكن تحسين موقع مثل موقعكم: ${doc}
+يسعدني إرسال تقرير مجاني عن موقعكم، بدون أي التزام.
 
 إذا لا ترغبون في استلام رسائل مني، يكفي الرد بكلمة STOP ولن أتواصل معكم مجدداً.
 
 مع التحية،
-${me}`;
+${sig}`;
   }
   return `Hi ${l.name} team,
 
-I was looking at your website (${l.host})${bullets ? ' and noticed:\n' + bullets : ' and think it could be doing more to bring you customers.'}
+I looked at your website (${l.host})${bullets ? ' and found:\n' + bullets : ' and think it could be doing more to bring you customers.'}
 
-I'm ${me} from ${agency}, a WordPress developer. I can help with: ${svc}.
-Happy to send a short free audit with fixes, no obligation.${site}
+I'm a WordPress developer and I can fix this and help with: ${svc}.
+Here is a short note on how I would improve a site like yours: ${doc}
+Happy to send a free audit of your website, no obligation.
 
 If you'd rather not hear from me, just reply "STOP" and I won't contact you again.
 
-Best,
-${me}`;
+Best regards,
+${sig}`;
 }
 function buildSubject(l) {
   return $('lang').value === 'ar' ? `فكرة سريعة لتحسين موقع ${l.name}` : `Quick idea for ${l.name}'s website`;
@@ -314,7 +333,8 @@ function renderLeads() {
   if (!currentJob) return;
   const fE = $('fEmail').checked, fW = $('fWa').checked, fH = $('fHide').checked;
   const all = currentJob.leads || [];
-  const leads = all.filter((l) => (!fE || l.email) && (!fW || l.whatsapp) && !(fH && sent[leadKey(l)] && (sent[leadKey(l)].email || sent[leadKey(l)].wa)));
+  renderIssueFilters(all);
+  const leads = all.filter((l) => (!fE || l.email) && (!fW || l.whatsapp) && (!selIssues.size || (l.issues || []).some((i) => selIssues.has(i))) && !(fH && sent[leadKey(l)] && (sent[leadKey(l)].email || sent[leadKey(l)].wa)));
   $('summary').textContent = `${currentJob.city}, ${currentJob.country} · ${all.length} leads · ${currentJob.withEmail} email · ${currentJob.withWhatsapp} WhatsApp · showing ${leads.length}`;
   $('bulkBtn').hidden = !(settings.scriptUrl && settings.scriptSecret);
   $('sheetBtn').hidden = $('bulkBtn').hidden;
@@ -427,14 +447,15 @@ function loadSettingsForm() {
   $('sToken').value = settings.token || '';
   $('sName').value = settings.name || '';
   $('sAgency').value = settings.agency || '';
-  $('sSite').value = settings.site || '';
+  $('sSite').value = settings.site || DEFAULT_DOC;
+  $('sSig').value = settings.signature || DEFAULT_SIG;
   $('sScript').value = settings.scriptUrl || '';
   $('sSecret').value = settings.scriptSecret || '';
 }
 $('saveBtn').onclick = () => {
   settings = {
     owner: $('sOwner').value.trim(), repo: $('sRepo').value.trim(), token: $('sToken').value.trim(),
-    name: $('sName').value.trim(), agency: $('sAgency').value.trim(), site: $('sSite').value.trim(),
+    name: $('sName').value.trim(), agency: $('sAgency').value.trim(), site: $('sSite').value.trim(), signature: $('sSig').value.trim(),
     scriptUrl: $('sScript').value.trim(), scriptSecret: $('sSecret').value.trim(),
   };
   store.set('ls_settings', settings);
