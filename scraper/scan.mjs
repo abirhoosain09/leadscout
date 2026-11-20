@@ -238,17 +238,30 @@ async function audit(c) {
   const host = hostOf(c.website);
   const t0 = Date.now();
   let page = null;
+  let err = '';
   try {
     page = await getText(c.website);
-  } catch {}
+  } catch (e) {
+    err = String((e && e.cause && e.cause.code) || (e && e.name) || e);
+  }
   const ms = Date.now() - t0;
   const issues = [];
+  let checked = true;
   let html = '';
   let platform = 'other';
   let emails = [];
 
-  if (!page || !page.ok || page.text.length < 200) {
-    issues.push('down');
+  if (!page) {
+    // only a real DNS/connection failure counts as "down"; a timeout just means we could not tell
+    if (/ENOTFOUND|ECONNREFUSED/.test(err)) issues.push('down');
+    else if (/CERT|SSL|TLS/i.test(err)) issues.push('no_https');
+    else checked = false;
+  } else if (!page.ok) {
+    // 404/410/5xx = broken page; 401/403/429/503 = usually a bot blocker, not a broken site
+    if (page.status === 404 || page.status === 410 || (page.status >= 500 && page.status !== 503)) issues.push('down');
+    else checked = false;
+  } else if (page.text.length < 200) {
+    checked = false;
   } else {
     html = page.text;
     platform = detectPlatform(html);
@@ -309,6 +322,8 @@ async function audit(c) {
   c.platform = platform;
   c.issues = issues;
   c.loadMs = ms;
+  c.checked = checked;
+  c.err = err || (page && !page.ok ? 'HTTP ' + page.status : '');
 
   const weights = { down: 5, no_https: 3, no_viewport: 3, old_wp: 3, slow: 2, outdated_year: 2, no_meta_desc: 1, not_wp: 1 };
   c.score =
